@@ -2,7 +2,7 @@ class ApiConstants {
   /// [Base Configuration]
 
 
-  static const String baseDomain = 'http://72.61.161.196:5004'; // Production
+  static const String baseDomain = 'http://localhost:5000'; 
   // static const String baseDomain = 'http://10.10.5.90:5000'; // Farhan Office
 
  // static const String baseDomain = 'http://10.10.5.33:5003'; // Eshita Office
@@ -56,16 +56,17 @@ class ApiConstants {
 /// [Authentication Endpoints]
 class AuthEndpoints {
   static const String _base = '${ApiConstants.baseUrl}/auth';
-  final String refreshToken = '$_base/refresh';
+  final String refreshToken = '$_base/refresh-token';
 
   final String login = '$_base/login';
   final String signup = '$_base/register';
-  final String forgotPassword = '$_base/forgotPassword';
-  final String verifyOtp = '$_base/verify-email';
-  final String resetPassword = '$_base/resetPassword';
+  final String logout = '$_base/logout';
+  final String forgotPassword = '$_base/forgot-password';
+  final String verifyOtp = '$_base/verify-otp';
+  final String resetPassword = '$_base/reset-password';
 
   final String google = '$_base/google';
-  final String changePassword = '$_base/updateMyPassword';
+  final String changePassword = '$_base/change-password';
 }
 
 class SearchEndpoints {
