@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
+import 'package:cembostyle/core/di/service_locator.dart';
 import 'package:cembostyle/moduls/auth/presentation/routes/auth_routes.dart';
 import 'package:cembostyle/moduls/auth/presentation/screens/email_verification_screen.dart';
 import 'package:cembostyle/moduls/auth/presentation/screens/lets_you_in_screen.dart';
@@ -11,7 +13,10 @@ import 'package:cembostyle/moduls/auth/presentation/screens/reset_password_scree
 import 'package:cembostyle/moduls/auth/presentation/screens/signup_screen.dart';
 import 'package:cembostyle/moduls/auth/presentation/screens/splash_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  setupServiceLocator();
   runApp(const MyApp());
 }
 

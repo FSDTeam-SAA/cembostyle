@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:cembostyle/moduls/auth/presentation/controllers/auth_controller.dart';
+
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
@@ -20,12 +22,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   bool _acceptedTerms = false;
   bool _obscurePassword = true;
+  final AuthController _authController = Get.find<AuthController>();
 
   bool get _isValid {
     return _acceptedTerms &&
         _nameController.text.trim().isNotEmpty &&
         _emailController.text.trim().isNotEmpty &&
         _passwordController.text.trim().isNotEmpty;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _authController.clearError();
   }
 
   @override
@@ -122,10 +131,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ],
             ),
             const SizedBox(height: 16),
-            AuthPrimaryButton(
-              label: 'Sign up',
-              onPressed: _isValid ? () => Get.toNamed(AuthRoutes.login) : null,
+            Obx(
+              () => AuthPrimaryButton(
+                label: 'Sign up',
+                isLoading: _authController.isLoading.value,
+                onPressed: _isValid
+                    ? () async {
+                        final success = await _authController.signup(
+                          name: _nameController.text.trim(),
+                          email: _emailController.text.trim(),
+                          password: _passwordController.text.trim(),
+                        );
+                        if (success) {
+                          Get.offNamed(AuthRoutes.login);
+                        }
+                      }
+                    : null,
+              ),
             ),
+            Obx(() {
+              final message = _authController.errorMessage.value;
+              if (message.isEmpty) return const SizedBox.shrink();
+              return Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Text(
+                  message,
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    color: Colors.redAccent,
+                  ),
+                ),
+              );
+            }),
             const SizedBox(height: 12),
             GestureDetector(
               onTap: () => Get.offNamed(AuthRoutes.login),

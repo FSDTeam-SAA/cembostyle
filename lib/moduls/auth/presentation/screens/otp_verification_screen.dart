@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+import 'package:cembostyle/moduls/auth/presentation/controllers/auth_controller.dart';
+
 class OtpVerificationScreen extends StatefulWidget {
   const OtpVerificationScreen({super.key});
 
@@ -16,6 +18,17 @@ class OtpVerificationScreen extends StatefulWidget {
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final TextEditingController _otpController = TextEditingController();
   String _otp = '';
+  final AuthController _authController = Get.find<AuthController>();
+
+  @override
+  void initState() {
+    super.initState();
+    _authController.clearError();
+    final arg = Get.arguments;
+    if (arg is String && arg.trim().isNotEmpty) {
+      _authController.setResetEmail(arg.trim());
+    }
+  }
 
   @override
   void dispose() {
@@ -72,12 +85,36 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               }),
             ),
             const SizedBox(height: 16),
-            AuthPrimaryButton(
-              label: 'Verify Now',
-              onPressed: _otp.length == 6
-                  ? () => Get.toNamed(AuthRoutes.resetPassword)
-                  : null,
+            Obx(
+              () => AuthPrimaryButton(
+                label: 'Verify Now',
+                isLoading: _authController.isLoading.value,
+                onPressed: _otp.length == 6
+                    ? () async {
+                        final success = await _authController.verifyOtp(
+                          otp: _otp,
+                        );
+                        if (success) {
+                          Get.toNamed(AuthRoutes.resetPassword);
+                        }
+                      }
+                    : null,
+              ),
             ),
+            Obx(() {
+              final message = _authController.errorMessage.value;
+              if (message.isEmpty) return const SizedBox.shrink();
+              return Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Text(
+                  message,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.redAccent,
+                  ),
+                ),
+              );
+            }),
             const Spacer(),
           ],
         ),

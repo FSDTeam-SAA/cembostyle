@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:cembostyle/moduls/auth/presentation/controllers/auth_controller.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -19,10 +21,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool _rememberMe = false;
   bool _obscurePassword = true;
+  final AuthController _authController = Get.find<AuthController>();
 
   bool get _isValid {
     return _emailController.text.trim().isNotEmpty &&
         _passwordController.text.trim().isNotEmpty;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _authController.clearError();
   }
 
   @override
@@ -108,10 +117,34 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
             const SizedBox(height: 16),
-            AuthPrimaryButton(
-              label: 'Sign in',
-              onPressed: _isValid ? () {} : null,
+            Obx(
+              () => AuthPrimaryButton(
+                label: 'Sign in',
+                isLoading: _authController.isLoading.value,
+                onPressed: _isValid
+                    ? () async {
+                        await _authController.login(
+                          email: _emailController.text.trim(),
+                          password: _passwordController.text.trim(),
+                        );
+                      }
+                    : null,
+              ),
             ),
+            Obx(() {
+              final message = _authController.errorMessage.value;
+              if (message.isEmpty) return const SizedBox.shrink();
+              return Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Text(
+                  message,
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    color: Colors.redAccent,
+                  ),
+                ),
+              );
+            }),
             const SizedBox(height: 24),
           ],
         ),

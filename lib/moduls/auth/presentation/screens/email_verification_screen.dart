@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:cembostyle/moduls/auth/presentation/controllers/auth_controller.dart';
+
 class EmailVerificationScreen extends StatefulWidget {
   const EmailVerificationScreen({super.key});
 
@@ -16,8 +18,15 @@ class EmailVerificationScreen extends StatefulWidget {
 
 class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   final TextEditingController _emailController = TextEditingController();
+  final AuthController _authController = Get.find<AuthController>();
 
   bool get _isValid => _emailController.text.trim().isNotEmpty;
+
+  @override
+  void initState() {
+    super.initState();
+    _authController.clearError();
+  }
 
   @override
   void dispose() {
@@ -61,10 +70,37 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
               onChanged: (_) => setState(() {}),
             ),
             const SizedBox(height: 16),
-            AuthPrimaryButton(
-              label: 'Continue',
-              onPressed: _isValid ? () => Get.toNamed(AuthRoutes.otp) : null,
+            Obx(
+              () => AuthPrimaryButton(
+                label: 'Continue',
+                isLoading: _authController.isLoading.value,
+                onPressed: _isValid
+                    ? () async {
+                        final success = await _authController
+                            .requestPasswordResetOtp(
+                          email: _emailController.text.trim(),
+                        );
+                        if (success) {
+                          Get.toNamed(AuthRoutes.otp);
+                        }
+                      }
+                    : null,
+              ),
             ),
+            Obx(() {
+              final message = _authController.errorMessage.value;
+              if (message.isEmpty) return const SizedBox.shrink();
+              return Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Text(
+                  message,
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    color: Colors.redAccent,
+                  ),
+                ),
+              );
+            }),
             const SizedBox(height: 24),
           ],
         ),

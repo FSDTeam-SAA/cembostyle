@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:cembostyle/moduls/auth/presentation/controllers/auth_controller.dart';
+
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
 
@@ -16,6 +18,7 @@ class ResetPasswordScreen extends StatefulWidget {
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmController = TextEditingController();
+  final AuthController _authController = Get.find<AuthController>();
 
   bool _obscurePassword = true;
   bool _obscureConfirm = true;
@@ -25,6 +28,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     return _passwordController.text.trim().isNotEmpty &&
         _confirmController.text.trim().isNotEmpty &&
         _passwordController.text.trim() == _confirmController.text.trim();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _authController.clearError();
   }
 
   @override
@@ -110,14 +119,38 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            AuthPrimaryButton(
-              label: 'Continue',
-              onPressed: _isValid && !_isSubmitting
-                  ? () {
-                      _showSuccessDialog();
-                    }
-                  : null,
+            Obx(
+              () => AuthPrimaryButton(
+                label: 'Continue',
+                isLoading: _authController.isLoading.value,
+                onPressed: _isValid &&
+                        !_isSubmitting &&
+                        !_authController.isLoading.value
+                    ? () async {
+                        final success = await _authController.resetPassword(
+                          newPassword: _passwordController.text.trim(),
+                        );
+                        if (success) {
+                          _showSuccessDialog();
+                        }
+                      }
+                    : null,
+              ),
             ),
+            Obx(() {
+              final message = _authController.errorMessage.value;
+              if (message.isEmpty) return const SizedBox.shrink();
+              return Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Text(
+                  message,
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    color: Colors.redAccent,
+                  ),
+                ),
+              );
+            }),
             const SizedBox(height: 24),
           ],
         ),
