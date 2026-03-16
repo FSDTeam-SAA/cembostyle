@@ -20,18 +20,27 @@ class GalleryScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
+        centerTitle: true,
+        titleSpacing: 0,
+        leadingWidth: BackButton().iconSize,
+
         title: const Text(
           'Try the Gallery for free',
-          style: TextStyle(color: AppPalette.textPrimary, fontSize: 16),
+          style: TextStyle(
+            color: AppPalette.textPrimary,
+            fontSize: 18,
+            fontWeight: FontWeight.w800,
+          ),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 18),
+        
+        leading: BackButton(
+          color: AppPalette.textPrimary,
           onPressed: () => Get.back(),
         ),
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -70,29 +79,39 @@ class GalleryScreen extends StatelessWidget {
               }),
               const SizedBox(height: 12),
               Expanded(
-                child: GridView.builder(
-                  itemCount: controller.galleryItems.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 12,
-                    crossAxisSpacing: 12,
-                    childAspectRatio: 0.72,
-                  ),
-                  itemBuilder: (context, index) {
-                    final item = controller.galleryItems[index];
-                    return GestureDetector(
-                      onTap: () =>
-                          Get.toNamed(HomeRoutes.details, arguments: item),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: AppCachedImage(
-                          imageUrl: item.imageUrl,
-                          onTap: () {},
+                child: Obx(() {
+                  final selectedId = controller
+                      .categories[controller.selectedCategoryIndex.value]
+                      .id;
+                  final filteredItems = controller.galleryItems
+                      .where((item) => item.categoryId == selectedId)
+                      .toList();
+
+                  return GridView.builder(
+                    itemCount: filteredItems.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 8,
+                      childAspectRatio: 1,
+                    ),
+                    itemBuilder: (context, index) {
+                      final item = filteredItems[index];
+                      return GestureDetector(
+                        onTap: () =>
+                            Get.toNamed(HomeRoutes.details, arguments: item),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: AppCachedImage(
+                            imageUrl: item.imageUrl,
+                            onTap: () {},
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ),
+                      );
+                    },
+                  );
+                }),
               ),
             ],
           ),

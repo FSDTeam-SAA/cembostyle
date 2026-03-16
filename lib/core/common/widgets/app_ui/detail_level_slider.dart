@@ -14,34 +14,119 @@ class DetailLevelSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const trackHeight = 2.0;
+    const thumbRadius = 14.0;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SliderTheme(
-          data: SliderTheme.of(context).copyWith(
-            activeTrackColor: AppPalette.purple,
-            inactiveTrackColor: AppPalette.divider,
-            thumbColor: AppPalette.purple,
-            overlayColor: AppPalette.purple.withOpacity(0.1),
-            trackHeight: 2,
-          ),
-          child: Slider(
-            value: value.toDouble(),
-            min: 0,
-            max: 2,
-            divisions: 2,
-            onChanged: (newValue) => onChanged(newValue.round()),
-          ),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final width = constraints.maxWidth;
+            final usableWidth = (width - (thumbRadius * 2)).clamp(0, width);
+            final positions = [
+              thumbRadius,
+              thumbRadius + (usableWidth / 2),
+              width - thumbRadius,
+            ];
+            final clampedValue = value.clamp(0, 2);
+            final thumbX = positions[clampedValue];
+
+            return GestureDetector(
+              onTapDown: (details) {
+                final dx =
+                    details.localPosition.dx.clamp(0.0, width) as double;
+                final nearest = _nearestIndex(dx, positions);
+                onChanged(nearest);
+              },
+              onHorizontalDragUpdate: (details) {
+                final dx =
+                    details.localPosition.dx.clamp(0.0, width) as double;
+                final nearest = _nearestIndex(dx, positions);
+                onChanged(nearest);
+              },
+              child: SizedBox(
+                height: 36,
+                  child: Stack(
+                    alignment: Alignment.centerLeft,
+                    children: [
+                      Positioned(
+                      left: thumbRadius,
+                      right: thumbRadius,
+                      child: Container(
+                        height: trackHeight,
+                        color: AppPalette.textPrimary,
+                      ),
+                    ),
+                    Positioned(
+                      left: thumbX - thumbRadius,
+                      child: Container(
+                        width: thumbRadius * 2,
+                        height: thumbRadius * 2,
+                        decoration: const BoxDecoration(
+                          color: AppPalette.purple,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            Text('Simple', style: TextStyle(fontSize: 11)),
-            Text('Basic', style: TextStyle(fontSize: 11)),
-            Text('Sketch', style: TextStyle(fontSize: 11)),
+          children: [
+            _LevelLabel(
+              text: 'Simple',
+              onTap: () => onChanged(0),
+            ),
+            _LevelLabel(
+              text: 'Basic',
+              onTap: () => onChanged(1),
+            ),
+            _LevelLabel(
+              text: 'Sketch',
+              onTap: () => onChanged(2),
+            ),
           ],
         ),
       ],
+    );
+  }
+
+  static int _nearestIndex(double dx, List<double> positions) {
+    var nearestIndex = 0;
+    var nearestDistance = (dx - positions[0]).abs();
+    for (var i = 1; i < positions.length; i++) {
+      final distance = (dx - positions[i]).abs();
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearestIndex = i;
+      }
+    }
+    return nearestIndex;
+  }
+}
+
+class _LevelLabel extends StatelessWidget {
+  final String text;
+  final VoidCallback onTap;
+
+  const _LevelLabel({required this.text, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontSize: 11,
+          color: AppPalette.textSecondary,
+        ),
+      ),
     );
   }
 }

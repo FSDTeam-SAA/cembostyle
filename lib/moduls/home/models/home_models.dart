@@ -7,12 +7,14 @@ class CategoryItem {
 
 class GalleryItem {
   final String id;
+  final String categoryId;
   final String title;
   final String imageUrl;
   final String resultImageUrl;
 
   const GalleryItem({
     required this.id,
+    required this.categoryId,
     required this.title,
     required this.imageUrl,
     required this.resultImageUrl,

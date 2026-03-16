@@ -17,10 +17,10 @@ class StyledDropdown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 14),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppPalette.cardBorder),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: AppPalette.textSecondary, width: 0.8),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<T>(
@@ -28,7 +28,13 @@ class StyledDropdown<T> extends StatelessWidget {
           items: items,
           onChanged: onChanged,
           isExpanded: true,
-          icon: const Icon(Icons.keyboard_arrow_down_rounded),
+          isDense: true,
+          borderRadius: BorderRadius.circular(16),
+          icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 20),
+          style: const TextStyle(
+            fontSize: 13,
+            color: AppPalette.textPrimary,
+          ),
         ),
       ),
     );

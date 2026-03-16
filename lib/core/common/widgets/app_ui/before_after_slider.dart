@@ -24,6 +24,7 @@ class BeforeAfterSlider extends StatelessWidget {
         final width = constraints.maxWidth;
         final height = constraints.maxHeight;
         final sliderX = width * value;
+        const radius = 8.0;
 
         return GestureDetector(
           onHorizontalDragUpdate: (details) {
@@ -46,7 +47,7 @@ class BeforeAfterSlider extends StatelessWidget {
                 imageUrl: afterImage,
                 width: width,
                 height: height,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(radius),
                 onTap: () {},
               ),
               ClipRect(
@@ -57,32 +58,43 @@ class BeforeAfterSlider extends StatelessWidget {
                     imageUrl: beforeImage,
                     width: width,
                     height: height,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(radius),
                     onTap: () {},
                   ),
                 ),
               ),
               Positioned(
                 left: sliderX - 1,
-                top: 12,
-                bottom: 12,
+                top: 10,
+                bottom: 10,
                 child: Container(width: 2, color: AppPalette.purple),
               ),
               Positioned(
-                left: sliderX - 16,
-                top: height / 2 - 16,
+                left: sliderX - 14,
+                top: height / 2 - 14,
                 child: Container(
-                  width: 32,
-                  height: 32,
+                  width: 28,
+                  height: 28,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppPalette.purple, width: 1.5),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: AppPalette.purple, width: 1.4),
                   ),
                   child: const Icon(
-                    Icons.compare_arrows,
-                    size: 16,
+                    Icons.chevron_left_rounded,
+                    size: 20,
                     color: AppPalette.purple,
+                  ),
+                ),
+              ),
+              IgnorePointer(
+                child: CustomPaint(
+                  size: Size(width, height),
+                  painter: _CornerBracketPainter(
+                    color: AppPalette.purple,
+                    strokeWidth: 2,
+                    cornerLength: 22,
+                    inset: 6,
                   ),
                 ),
               ),
@@ -91,5 +103,77 @@ class BeforeAfterSlider extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class _CornerBracketPainter extends CustomPainter {
+  final Color color;
+  final double strokeWidth;
+  final double cornerLength;
+  final double inset;
+
+  const _CornerBracketPainter({
+    required this.color,
+    required this.strokeWidth,
+    required this.cornerLength,
+    required this.inset,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke;
+
+    final left = inset;
+    final top = inset;
+    final right = size.width - inset;
+    final bottom = size.height - inset;
+
+    // Top-left
+    canvas.drawLine(Offset(left, top + cornerLength), Offset(left, top), paint);
+    canvas.drawLine(Offset(left, top), Offset(left + cornerLength, top), paint);
+    // Top-right
+    canvas.drawLine(
+      Offset(right - cornerLength, top),
+      Offset(right, top),
+      paint,
+    );
+    canvas.drawLine(
+      Offset(right, top),
+      Offset(right, top + cornerLength),
+      paint,
+    );
+    // Bottom-left
+    canvas.drawLine(
+      Offset(left, bottom - cornerLength),
+      Offset(left, bottom),
+      paint,
+    );
+    canvas.drawLine(
+      Offset(left, bottom),
+      Offset(left + cornerLength, bottom),
+      paint,
+    );
+    // Bottom-right
+    canvas.drawLine(
+      Offset(right - cornerLength, bottom),
+      Offset(right, bottom),
+      paint,
+    );
+    canvas.drawLine(
+      Offset(right, bottom),
+      Offset(right, bottom - cornerLength),
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _CornerBracketPainter oldDelegate) {
+    return oldDelegate.color != color ||
+        oldDelegate.strokeWidth != strokeWidth ||
+        oldDelegate.cornerLength != cornerLength ||
+        oldDelegate.inset != inset;
   }
 }

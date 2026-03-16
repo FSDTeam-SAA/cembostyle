@@ -29,16 +29,20 @@ class DetailsScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         title: const Text(
           'Details',
-          style: TextStyle(color: AppPalette.textPrimary, fontSize: 16),
+          style: TextStyle(
+            color: AppPalette.textPrimary,
+            fontSize: 18,
+            fontWeight: FontWeight.w800,
+          ),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 18),
+        leading: BackButton(
+          color: AppPalette.textPrimary,
           onPressed: () => Get.back(),
         ),
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -78,16 +82,21 @@ class DetailsScreen extends StatelessWidget {
                   },
                 );
               }),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
               Expanded(
-                child: Obx(() {
-                  return BeforeAfterSlider(
-                    beforeImage: image,
-                    afterImage: resultImage,
-                    value: controller.compareValue.value,
-                    onChanged: controller.updateCompare,
-                  );
-                }),
+                child: Center(
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: Obx(() {
+                      return BeforeAfterSlider(
+                        beforeImage: image,
+                        afterImage: resultImage,
+                        value: controller.compareValue.value,
+                        onChanged: controller.updateCompare,
+                      );
+                    }),
+                  ),
+                ),
               ),
             ],
           ),
