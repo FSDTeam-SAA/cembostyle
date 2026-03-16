@@ -12,6 +12,14 @@ import 'package:cembostyle/moduls/auth/presentation/screens/otp_verification_scr
 import 'package:cembostyle/moduls/auth/presentation/screens/reset_password_screen.dart';
 import 'package:cembostyle/moduls/auth/presentation/screens/signup_screen.dart';
 import 'package:cembostyle/moduls/auth/presentation/screens/splash_screen.dart';
+import 'package:cembostyle/moduls/home/presentation/routes/home_routes.dart';
+import 'package:cembostyle/moduls/home/presentation/screens/home_flow/details_screen.dart';
+import 'package:cembostyle/moduls/home/presentation/screens/home_flow/gallery_screen.dart';
+import 'package:cembostyle/moduls/home/presentation/screens/home_flow/payment_method_screen.dart';
+import 'package:cembostyle/moduls/home/presentation/screens/home_flow/pricing_plan_screen.dart';
+import 'package:cembostyle/moduls/home/presentation/screens/home_shell_screen.dart';
+import 'package:cembostyle/moduls/stencil/customize_style_screen.dart';
+import 'package:cembostyle/moduls/stencil/stencil_result_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,6 +57,25 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: AuthRoutes.resetPassword,
           page: () => const ResetPasswordScreen(),
+        ),
+        GetPage(name: HomeRoutes.home, page: () => const HomeShellScreen()),
+        GetPage(name: HomeRoutes.gallery, page: () => const GalleryScreen()),
+        GetPage(name: HomeRoutes.details, page: () => const DetailsScreen()),
+        GetPage(
+          name: HomeRoutes.pricing,
+          page: () => const PricingPlanScreen(),
+        ),
+        GetPage(
+          name: HomeRoutes.payment,
+          page: () => const PaymentMethodScreen(),
+        ),
+        GetPage(
+          name: HomeRoutes.customizeStyle,
+          page: () => const CustomizeStyleScreen(),
+        ),
+        GetPage(
+          name: HomeRoutes.stencilResult,
+          page: () => const StencilResultScreen(),
         ),
       ],
     );
