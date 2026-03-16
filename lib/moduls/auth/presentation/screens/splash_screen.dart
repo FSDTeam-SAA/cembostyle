@@ -3,7 +3,7 @@ import 'package:cembostyle/core/common/widgets/app_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:cembostyle/auth/presentation/routes/auth_routes.dart';
+import 'package:cembostyle/moduls/auth/presentation/routes/auth_routes.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

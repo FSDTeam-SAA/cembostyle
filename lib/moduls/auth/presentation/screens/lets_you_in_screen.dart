@@ -1,5 +1,5 @@
-import 'package:cembostyle/auth/presentation/routes/auth_routes.dart';
-import 'package:cembostyle/auth/presentation/widgets/auth_widgets.dart';
+import 'package:cembostyle/moduls/auth/presentation/routes/auth_routes.dart';
+import 'package:cembostyle/moduls/auth/presentation/widgets/auth_widgets.dart';
 import 'package:cembostyle/core/common/constants/app_images.dart';
 import 'package:cembostyle/core/common/widgets/app_scaffold.dart';
 import 'package:flutter/material.dart';
