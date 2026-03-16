@@ -3,19 +3,19 @@ import 'package:get/get.dart';
 
 import 'package:cembostyle/core/common/widgets/app_cached_image.dart';
 import 'package:cembostyle/core/common/widgets/app_scaffold.dart';
-import 'package:cembostyle/moduls/home/presentation/controllers/home_controller.dart';
-import 'package:cembostyle/moduls/home/presentation/routes/home_routes.dart';
-import 'package:cembostyle/moduls/home/presentation/theme/home_palette.dart';
-import 'package:cembostyle/moduls/home/presentation/widgets/common/home_primary_button.dart';
-import 'package:cembostyle/moduls/home/presentation/widgets/stencil_flow/generating_dialog.dart';
-import 'package:cembostyle/moduls/home/presentation/widgets/stencil_flow/style_option_card.dart';
+import 'package:cembostyle/moduls/stencil/controllers/stencil_controller.dart';
+import 'package:cembostyle/moduls/stencil/presentation/routes/stencil_routes.dart';
+import 'package:cembostyle/core/theme/app_palette.dart';
+import 'package:cembostyle/core/common/widgets/app_ui/home_primary_button.dart';
+import 'package:cembostyle/moduls/stencil/presentation/widgets/generating_dialog.dart';
+import 'package:cembostyle/moduls/stencil/presentation/widgets/style_option_card.dart';
 
 class CustomizeStyleScreen extends StatelessWidget {
   const CustomizeStyleScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<HomeController>();
+    final controller = Get.find<StencilController>();
 
     return AppScaffold(
       removePadding: true,
@@ -24,7 +24,7 @@ class CustomizeStyleScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         title: const Text(
           'Customize Style',
-          style: TextStyle(color: HomePalette.textPrimary, fontSize: 16),
+          style: TextStyle(color: AppPalette.textPrimary, fontSize: 16),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, size: 18),
@@ -39,16 +39,13 @@ class CustomizeStyleScreen extends StatelessWidget {
             children: [
               const Text(
                 'Choose your stencil style and adjust settings',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: HomePalette.textSecondary,
-                ),
+                style: TextStyle(fontSize: 12, color: AppPalette.textSecondary),
               ),
               const SizedBox(height: 12),
               ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: AppCachedImage(
-                  imageUrl: 'https://picsum.photos/id/1062/700/700',
+                  imageUrl: controller.samples.first.originalUrl,
                   height: 240,
                   width: double.infinity,
                   onTap: () {},
@@ -102,7 +99,7 @@ class CustomizeStyleScreen extends StatelessWidget {
                   );
                   await Future.delayed(const Duration(seconds: 2));
                   Get.back();
-                  Get.toNamed(HomeRoutes.stencilResult);
+                  Get.toNamed(StencilRoutes.stencilResult);
                 },
               ),
             ],
@@ -133,16 +130,16 @@ class _AdjustmentSlider extends StatelessWidget {
                 '${(value.value * 100).round()}%',
                 style: const TextStyle(
                   fontSize: 11,
-                  color: HomePalette.textSecondary,
+                  color: AppPalette.textSecondary,
                 ),
               ),
             ],
           ),
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
-              activeTrackColor: HomePalette.purple,
-              inactiveTrackColor: HomePalette.divider,
-              thumbColor: HomePalette.purple,
+              activeTrackColor: AppPalette.purple,
+              inactiveTrackColor: AppPalette.divider,
+              thumbColor: AppPalette.purple,
               trackHeight: 2,
             ),
             child: Slider(

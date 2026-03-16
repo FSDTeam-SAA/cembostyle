@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:cembostyle/core/common/widgets/app_scaffold.dart';
-import 'package:cembostyle/moduls/home/presentation/controllers/home_controller.dart';
-import 'package:cembostyle/moduls/home/presentation/models/home_models.dart';
-import 'package:cembostyle/moduls/home/presentation/theme/home_palette.dart';
-import 'package:cembostyle/moduls/home/presentation/widgets/common/before_after_slider.dart';
-import 'package:cembostyle/moduls/home/presentation/widgets/common/detail_level_slider.dart';
-import 'package:cembostyle/moduls/home/presentation/widgets/common/styled_dropdown.dart';
+import 'package:cembostyle/moduls/home/controllers/home_controller.dart';
+
+import 'package:cembostyle/core/theme/app_palette.dart';
+import 'package:cembostyle/core/common/widgets/app_ui/before_after_slider.dart';
+import 'package:cembostyle/core/common/widgets/app_ui/detail_level_slider.dart';
+import 'package:cembostyle/core/common/widgets/app_ui/styled_dropdown.dart';
+
+import '../../../models/home_models.dart';
 
 class DetailsScreen extends StatelessWidget {
   const DetailsScreen({super.key});
@@ -27,7 +29,7 @@ class DetailsScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         title: const Text(
           'Details',
-          style: TextStyle(color: HomePalette.textPrimary, fontSize: 16),
+          style: TextStyle(color: AppPalette.textPrimary, fontSize: 16),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, size: 18),

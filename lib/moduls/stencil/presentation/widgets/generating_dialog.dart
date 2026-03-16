@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:cembostyle/moduls/home/presentation/theme/home_palette.dart';
+import 'package:cembostyle/core/theme/app_palette.dart';
 
 class GeneratingDialog extends StatelessWidget {
   const GeneratingDialog({super.key});
@@ -19,13 +19,13 @@ class GeneratingDialog extends StatelessWidget {
               width: 72,
               height: 72,
               decoration: BoxDecoration(
-                color: HomePalette.purpleSoft,
+                color: AppPalette.purpleSoft,
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.verified,
                 size: 36,
-                color: HomePalette.purple,
+                color: AppPalette.purple,
               ),
             ),
             const SizedBox(height: 16),
@@ -34,17 +34,17 @@ class GeneratingDialog extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 16,
-                color: HomePalette.purple,
+                color: AppPalette.purple,
               ),
             ),
             const SizedBox(height: 8),
             const Text(
               'AI is processing your image this usually takes a few seconds.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12, color: HomePalette.textSecondary),
+              style: TextStyle(fontSize: 12, color: AppPalette.textSecondary),
             ),
             const SizedBox(height: 16),
-            const CircularProgressIndicator(color: HomePalette.purple),
+            const CircularProgressIndicator(color: AppPalette.purple),
           ],
         ),
       ),

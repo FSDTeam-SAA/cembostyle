@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:cembostyle/moduls/home/presentation/theme/home_palette.dart';
+import 'package:cembostyle/core/theme/app_palette.dart';
 
 class HomePrimaryButton extends StatelessWidget {
   final String text;
@@ -28,7 +28,7 @@ class HomePrimaryButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onTap,
         style: ElevatedButton.styleFrom(
-          backgroundColor: HomePalette.purple,
+          backgroundColor: AppPalette.purple,
           foregroundColor: Colors.white,
           elevation: 0,
           shape: RoundedRectangleBorder(

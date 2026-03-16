@@ -7,19 +7,15 @@ class HomeController extends GetxController {
   final RxInt bottomNavIndex = 0.obs;
   final RxInt selectedCategoryIndex = 0.obs;
   final RxInt selectedPlanIndex = 0.obs;
-  final RxInt selectedStyleIndex = 0.obs;
   final RxInt selectedColorThemeIndex = 0.obs;
   final RxInt selectedDetailLevel = 1.obs;
   final RxDouble compareValue = 0.55.obs;
-  final RxDouble brightness = 0.8.obs;
-  final RxDouble contrast = 0.6.obs;
   final RxBool hasActivePlan = false.obs;
 
   List<CategoryItem> get categories => HomeDummyData.categories;
   List<GalleryItem> get galleryItems => HomeDummyData.galleryItems;
   List<ActivityItem> get recentActivities => HomeDummyData.recentActivities;
   List<PlanOption> get plans => HomeDummyData.plans;
-  List<StencilStyleOption> get stencilStyles => HomeDummyData.stencilStyles;
   List<ColorThemeOption> get colorThemes => HomeDummyData.colorThemes;
 
   void setBottomNav(int index) => bottomNavIndex.value = index;

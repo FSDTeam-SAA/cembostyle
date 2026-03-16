@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:cembostyle/moduls/home/presentation/theme/home_palette.dart';
+import 'package:cembostyle/core/theme/app_palette.dart';
 
 class CategoryChip extends StatelessWidget {
   final String text;
@@ -21,10 +21,10 @@ class CategoryChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? HomePalette.purpleSoft : Colors.white,
+          color: isSelected ? AppPalette.purpleSoft : Colors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? HomePalette.purple : HomePalette.cardBorder,
+            color: isSelected ? AppPalette.purple : AppPalette.cardBorder,
           ),
         ),
         child: Text(
@@ -32,7 +32,7 @@ class CategoryChip extends StatelessWidget {
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            color: isSelected ? HomePalette.purple : HomePalette.textSecondary,
+            color: isSelected ? AppPalette.purple : AppPalette.textSecondary,
           ),
         ),
       ),

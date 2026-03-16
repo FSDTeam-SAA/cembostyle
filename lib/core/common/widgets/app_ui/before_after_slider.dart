@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:cembostyle/core/common/widgets/app_cached_image.dart';
-import 'package:cembostyle/moduls/home/presentation/theme/home_palette.dart';
+import 'package:cembostyle/core/theme/app_palette.dart';
 
 class BeforeAfterSlider extends StatelessWidget {
   final String beforeImage;
@@ -66,7 +66,7 @@ class BeforeAfterSlider extends StatelessWidget {
                 left: sliderX - 1,
                 top: 12,
                 bottom: 12,
-                child: Container(width: 2, color: HomePalette.purple),
+                child: Container(width: 2, color: AppPalette.purple),
               ),
               Positioned(
                 left: sliderX - 16,
@@ -77,12 +77,12 @@ class BeforeAfterSlider extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: HomePalette.purple, width: 1.5),
+                    border: Border.all(color: AppPalette.purple, width: 1.5),
                   ),
                   child: const Icon(
                     Icons.compare_arrows,
                     size: 16,
-                    color: HomePalette.purple,
+                    color: AppPalette.purple,
                   ),
                 ),
               ),

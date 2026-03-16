@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:cembostyle/core/common/widgets/app_scaffold.dart';
-import 'package:cembostyle/moduls/home/presentation/controllers/home_controller.dart';
-import 'package:cembostyle/moduls/home/presentation/widgets/navigation/home_bottom_nav.dart';
+import 'package:cembostyle/moduls/home/controllers/home_controller.dart';
+import 'package:cembostyle/core/navigation/bottom_nav_bar.dart';
 import 'package:cembostyle/moduls/home/presentation/screens/home_flow/home_screen.dart';
 import 'package:cembostyle/moduls/home/presentation/screens/profile_screen.dart';
-import 'package:cembostyle/moduls/stencil/stencil_tab_screen.dart';
+import 'package:cembostyle/moduls/stencil/presentation/screens/stencil_tab_screen.dart';
 
 class HomeShellScreen extends StatelessWidget {
   const HomeShellScreen({super.key});
@@ -23,7 +23,7 @@ class HomeShellScreen extends StatelessWidget {
           children: const [HomeScreen(), StencilTabScreen(), ProfileScreen()],
         );
       }),
-      bottomNavigationBar: const HomeBottomNav(),
+      bottomNavigationBar: const BottomNavBar(),
     );
   }
 }

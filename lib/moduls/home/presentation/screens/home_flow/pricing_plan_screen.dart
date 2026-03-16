@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:cembostyle/core/common/widgets/app_scaffold.dart';
-import 'package:cembostyle/moduls/home/presentation/controllers/home_controller.dart';
+import 'package:cembostyle/moduls/home/controllers/home_controller.dart';
 import 'package:cembostyle/moduls/home/presentation/routes/home_routes.dart';
-import 'package:cembostyle/moduls/home/presentation/theme/home_palette.dart';
-import 'package:cembostyle/moduls/home/presentation/widgets/common/home_primary_button.dart';
+import 'package:cembostyle/core/theme/app_palette.dart';
+import 'package:cembostyle/core/common/widgets/app_ui/home_primary_button.dart';
 
 class PricingPlanScreen extends StatelessWidget {
   const PricingPlanScreen({super.key});
@@ -21,7 +21,7 @@ class PricingPlanScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         title: const Text(
           'Unlock Premium Features',
-          style: TextStyle(color: HomePalette.textPrimary, fontSize: 16),
+          style: TextStyle(color: AppPalette.textPrimary, fontSize: 16),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, size: 18),
@@ -36,10 +36,7 @@ class PricingPlanScreen extends StatelessWidget {
             children: [
               const Text(
                 'Start your 3-day free trial today',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: HomePalette.textSecondary,
-                ),
+                style: TextStyle(fontSize: 12, color: AppPalette.textSecondary),
               ),
               const SizedBox(height: 12),
               Obx(() {
@@ -48,7 +45,7 @@ class PricingPlanScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: HomePalette.cardBorder),
+                    border: Border.all(color: AppPalette.cardBorder),
                   ),
                   child: Row(
                     children: [
@@ -79,9 +76,9 @@ class PricingPlanScreen extends StatelessWidget {
                 return Container(
                   padding: const EdgeInsets.all(18),
                   decoration: BoxDecoration(
-                    color: HomePalette.purpleSoft,
+                    color: AppPalette.purpleSoft,
                     borderRadius: BorderRadius.circular(18),
-                    border: Border.all(color: HomePalette.purpleBorder),
+                    border: Border.all(color: AppPalette.purpleBorder),
                   ),
                   child: Column(
                     children: [
@@ -89,7 +86,7 @@ class PricingPlanScreen extends StatelessWidget {
                         width: 44,
                         height: 44,
                         decoration: BoxDecoration(
-                          color: HomePalette.purple,
+                          color: AppPalette.purple,
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
@@ -108,9 +105,7 @@ class PricingPlanScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       RichText(
                         text: TextSpan(
-                          style: const TextStyle(
-                            color: HomePalette.textPrimary,
-                          ),
+                          style: const TextStyle(color: AppPalette.textPrimary),
                           children: [
                             TextSpan(
                               text: plan.price,
@@ -123,7 +118,7 @@ class PricingPlanScreen extends StatelessWidget {
                               text: plan.periodLabel,
                               style: const TextStyle(
                                 fontSize: 12,
-                                color: HomePalette.textSecondary,
+                                color: AppPalette.textSecondary,
                               ),
                             ),
                           ],
@@ -135,7 +130,7 @@ class PricingPlanScreen extends StatelessWidget {
                           plan.savings,
                           style: const TextStyle(
                             fontSize: 11,
-                            color: HomePalette.purple,
+                            color: AppPalette.purple,
                           ),
                         ),
                       ],
@@ -154,7 +149,7 @@ class PricingPlanScreen extends StatelessWidget {
                             Icon(
                               Icons.timelapse,
                               size: 16,
-                              color: HomePalette.purple,
+                              color: AppPalette.purple,
                             ),
                             SizedBox(width: 6),
                             Expanded(
@@ -170,7 +165,7 @@ class PricingPlanScreen extends StatelessWidget {
                               'Cancel anytime',
                               style: TextStyle(
                                 fontSize: 10,
-                                color: HomePalette.textSecondary,
+                                color: AppPalette.textSecondary,
                               ),
                             ),
                           ],
@@ -187,7 +182,7 @@ class PricingPlanScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 10,
-                          color: HomePalette.textSecondary,
+                          color: AppPalette.textSecondary,
                         ),
                       ),
                     ],
@@ -226,10 +221,7 @@ class PricingPlanScreen extends StatelessWidget {
               const Text(
                 'By continuing, you agree to our Terms of Service and Privacy Policy',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 10,
-                  color: HomePalette.textSecondary,
-                ),
+                style: TextStyle(fontSize: 10, color: AppPalette.textSecondary),
               ),
               const SizedBox(height: 6),
               const Center(
@@ -237,7 +229,7 @@ class PricingPlanScreen extends StatelessWidget {
                   'Bheppo LLC © 2026',
                   style: TextStyle(
                     fontSize: 10,
-                    color: HomePalette.textSecondary,
+                    color: AppPalette.textSecondary,
                   ),
                 ),
               ),
@@ -269,7 +261,7 @@ class _PlanToggleChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? HomePalette.purple : Colors.transparent,
+          color: isSelected ? AppPalette.purple : Colors.transparent,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
@@ -279,7 +271,7 @@ class _PlanToggleChip extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: isSelected ? Colors.white : HomePalette.textPrimary,
+                color: isSelected ? Colors.white : AppPalette.textPrimary,
               ),
             ),
             const SizedBox(height: 2),
@@ -287,7 +279,7 @@ class _PlanToggleChip extends StatelessWidget {
               subtitle,
               style: TextStyle(
                 fontSize: 10,
-                color: isSelected ? Colors.white70 : HomePalette.textSecondary,
+                color: isSelected ? Colors.white70 : AppPalette.textSecondary,
               ),
             ),
           ],
@@ -317,7 +309,7 @@ class _InfoCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: highlight ? const Color(0xFFFFF3D6) : Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: HomePalette.cardBorder),
+        border: Border.all(color: AppPalette.cardBorder),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -339,7 +331,7 @@ class _InfoCard extends StatelessWidget {
                       line,
                       style: const TextStyle(
                         fontSize: 11,
-                        color: HomePalette.textSecondary,
+                        color: AppPalette.textSecondary,
                       ),
                     ),
                   ),
@@ -351,17 +343,13 @@ class _InfoCard extends StatelessWidget {
             const SizedBox(height: 8),
             Row(
               children: const [
-                Icon(
-                  Icons.shield_outlined,
-                  size: 14,
-                  color: HomePalette.purple,
-                ),
+                Icon(Icons.shield_outlined, size: 14, color: AppPalette.purple),
                 SizedBox(width: 6),
                 Text(
                   'Secure Payments',
                   style: TextStyle(
                     fontSize: 11,
-                    color: HomePalette.textSecondary,
+                    color: AppPalette.textSecondary,
                   ),
                 ),
               ],

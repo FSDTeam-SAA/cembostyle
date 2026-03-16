@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:cembostyle/moduls/home/presentation/theme/home_palette.dart';
+import 'package:cembostyle/core/theme/app_palette.dart';
 
 class HomeOutlineButton extends StatelessWidget {
   final String text;
@@ -9,6 +9,9 @@ class HomeOutlineButton extends StatelessWidget {
   final double? width;
   final Widget? icon;
   final double radius;
+  final Color? borderColor;
+  final Color? fillColor;
+  final Color? foregroundColor;
 
   const HomeOutlineButton({
     super.key,
@@ -18,6 +21,9 @@ class HomeOutlineButton extends StatelessWidget {
     this.width,
     this.icon,
     this.radius = 24,
+    this.borderColor,
+    this.fillColor,
+    this.foregroundColor,
   });
 
   @override
@@ -28,11 +34,13 @@ class HomeOutlineButton extends StatelessWidget {
       child: OutlinedButton(
         onPressed: onTap,
         style: OutlinedButton.styleFrom(
-          foregroundColor: HomePalette.purple,
-          side: const BorderSide(color: HomePalette.purple),
+          foregroundColor: foregroundColor ?? AppPalette.purple,
+          backgroundColor: fillColor ?? Colors.transparent,
+          side: BorderSide(color: borderColor ?? AppPalette.purple),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radius),
           ),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

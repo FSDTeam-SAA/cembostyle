@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:cembostyle/moduls/home/presentation/theme/home_palette.dart';
+import 'package:cembostyle/core/theme/app_palette.dart';
 
 class StyleOptionCard extends StatelessWidget {
   final String title;
@@ -23,10 +23,10 @@ class StyleOptionCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         decoration: BoxDecoration(
-          color: isSelected ? HomePalette.purpleSoft : Colors.white,
+          color: isSelected ? AppPalette.purpleSoft : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? HomePalette.purple : HomePalette.cardBorder,
+            color: isSelected ? AppPalette.purple : AppPalette.cardBorder,
           ),
         ),
         child: Column(
@@ -37,9 +37,7 @@ class StyleOptionCard extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 12,
-                color: isSelected
-                    ? HomePalette.purple
-                    : HomePalette.textPrimary,
+                color: isSelected ? AppPalette.purple : AppPalette.textPrimary,
               ),
             ),
             const SizedBox(height: 4),
@@ -47,7 +45,7 @@ class StyleOptionCard extends StatelessWidget {
               subtitle,
               style: const TextStyle(
                 fontSize: 10,
-                color: HomePalette.textSecondary,
+                color: AppPalette.textSecondary,
               ),
             ),
           ],

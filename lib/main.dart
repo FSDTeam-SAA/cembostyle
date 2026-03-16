@@ -18,8 +18,9 @@ import 'package:cembostyle/moduls/home/presentation/screens/home_flow/gallery_sc
 import 'package:cembostyle/moduls/home/presentation/screens/home_flow/payment_method_screen.dart';
 import 'package:cembostyle/moduls/home/presentation/screens/home_flow/pricing_plan_screen.dart';
 import 'package:cembostyle/moduls/home/presentation/screens/home_shell_screen.dart';
-import 'package:cembostyle/moduls/stencil/customize_style_screen.dart';
-import 'package:cembostyle/moduls/stencil/stencil_result_screen.dart';
+import 'package:cembostyle/moduls/stencil/presentation/routes/stencil_routes.dart';
+import 'package:cembostyle/moduls/stencil/presentation/screens/customize_style_screen.dart';
+import 'package:cembostyle/moduls/stencil/presentation/screens/stencil_result_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -70,11 +71,11 @@ class MyApp extends StatelessWidget {
           page: () => const PaymentMethodScreen(),
         ),
         GetPage(
-          name: HomeRoutes.customizeStyle,
+          name: StencilRoutes.customizeStyle,
           page: () => const CustomizeStyleScreen(),
         ),
         GetPage(
-          name: HomeRoutes.stencilResult,
+          name: StencilRoutes.stencilResult,
           page: () => const StencilResultScreen(),
         ),
       ],

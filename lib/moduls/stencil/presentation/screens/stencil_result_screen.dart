@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:cembostyle/core/common/widgets/app_scaffold.dart';
-import 'package:cembostyle/moduls/home/presentation/controllers/home_controller.dart';
-import 'package:cembostyle/moduls/home/presentation/theme/home_palette.dart';
-import 'package:cembostyle/moduls/home/presentation/widgets/common/before_after_slider.dart';
-import 'package:cembostyle/moduls/home/presentation/widgets/common/detail_level_slider.dart';
-import 'package:cembostyle/moduls/home/presentation/widgets/common/home_outline_button.dart';
-import 'package:cembostyle/moduls/home/presentation/widgets/common/home_primary_button.dart';
-import 'package:cembostyle/moduls/home/presentation/widgets/common/styled_dropdown.dart';
+import 'package:cembostyle/moduls/stencil/controllers/stencil_controller.dart';
+import 'package:cembostyle/core/theme/app_palette.dart';
+import 'package:cembostyle/core/common/widgets/app_ui/before_after_slider.dart';
+import 'package:cembostyle/core/common/widgets/app_ui/detail_level_slider.dart';
+import 'package:cembostyle/core/common/widgets/app_ui/home_outline_button.dart';
+import 'package:cembostyle/core/common/widgets/app_ui/home_primary_button.dart';
+import 'package:cembostyle/core/common/widgets/app_ui/styled_dropdown.dart';
 
 class StencilResultScreen extends StatelessWidget {
   const StencilResultScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<HomeController>();
-    final image = controller.galleryItems.first.imageUrl;
-    final resultImage = controller.galleryItems.first.resultImageUrl;
+    final controller = Get.find<StencilController>();
+    final image = controller.samples.first.originalUrl;
+    final resultImage = controller.samples.first.resultUrl;
 
     return AppScaffold(
       removePadding: true,
@@ -26,7 +26,7 @@ class StencilResultScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         title: const Text(
           'Your Stencil',
-          style: TextStyle(color: HomePalette.textPrimary, fontSize: 16),
+          style: TextStyle(color: AppPalette.textPrimary, fontSize: 16),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, size: 18),
@@ -120,11 +120,11 @@ class StencilResultScreen extends StatelessWidget {
                   icon: const Icon(
                     Icons.refresh,
                     size: 16,
-                    color: HomePalette.purple,
+                    color: AppPalette.purple,
                   ),
                   label: const Text(
                     'Regenerate with new setting',
-                    style: TextStyle(color: HomePalette.purple, fontSize: 12),
+                    style: TextStyle(color: AppPalette.purple, fontSize: 12),
                   ),
                 ),
               ),

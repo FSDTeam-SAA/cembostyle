@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:cembostyle/moduls/home/presentation/theme/home_palette.dart';
+import 'package:cembostyle/core/theme/app_palette.dart';
 
 class StyledDropdown<T> extends StatelessWidget {
   final T value;
@@ -20,7 +20,7 @@ class StyledDropdown<T> extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: HomePalette.cardBorder),
+        border: Border.all(color: AppPalette.cardBorder),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<T>(

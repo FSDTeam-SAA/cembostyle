@@ -53,18 +53,6 @@ class PlanOption {
   });
 }
 
-class StencilStyleOption {
-  final String id;
-  final String title;
-  final String subtitle;
-
-  const StencilStyleOption({
-    required this.id,
-    required this.title,
-    required this.subtitle,
-  });
-}
-
 class ColorThemeOption {
   final String id;
   final String title;

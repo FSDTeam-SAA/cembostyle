@@ -102,29 +102,6 @@ class HomeDummyData {
     ),
   ];
 
-  static const List<StencilStyleOption> stencilStyles = [
-    StencilStyleOption(
-      id: 'outline',
-      title: 'Outline',
-      subtitle: 'Clean lines',
-    ),
-    StencilStyleOption(
-      id: 'realism',
-      title: 'Realism Map',
-      subtitle: 'Animals',
-    ),
-    StencilStyleOption(
-      id: 'detail',
-      title: 'Detail Guide',
-      subtitle: 'Optional',
-    ),
-    StencilStyleOption(
-      id: 'halftone',
-      title: 'Halftone Guide',
-      subtitle: 'Optional advanced',
-    ),
-  ];
-
   static const List<ColorThemeOption> colorThemes = [
     ColorThemeOption(id: 'black', title: 'Tattoo Black & Grey'),
     ColorThemeOption(id: 'stencil_violet', title: 'Stencil Violet'),

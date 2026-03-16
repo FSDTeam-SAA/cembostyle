@@ -1,7 +1,8 @@
 import 'package:get/get.dart';
 
 import '../../moduls/auth/presentation/controllers/auth_controller.dart';
-import '../../moduls/home/presentation/controllers/home_controller.dart';
+import '../../moduls/home/controllers/home_controller.dart';
+import '../../moduls/stencil/controllers/stencil_controller.dart';
 
 void setupControllers() {
   Get.put(
@@ -18,4 +19,5 @@ void setupControllers() {
   );
 
   Get.put(HomeController());
+  Get.put(StencilController());
 }

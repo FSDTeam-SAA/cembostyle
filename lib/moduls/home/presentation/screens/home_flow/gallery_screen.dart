@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 
 import 'package:cembostyle/core/common/widgets/app_cached_image.dart';
 import 'package:cembostyle/core/common/widgets/app_scaffold.dart';
-import 'package:cembostyle/moduls/home/presentation/controllers/home_controller.dart';
+import 'package:cembostyle/moduls/home/controllers/home_controller.dart';
 import 'package:cembostyle/moduls/home/presentation/routes/home_routes.dart';
-import 'package:cembostyle/moduls/home/presentation/theme/home_palette.dart';
+import 'package:cembostyle/core/theme/app_palette.dart';
 import 'package:cembostyle/moduls/home/presentation/widgets/home_flow/category_chip.dart';
 
 class GalleryScreen extends StatelessWidget {
@@ -22,7 +22,7 @@ class GalleryScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         title: const Text(
           'Try the Gallery for free',
-          style: TextStyle(color: HomePalette.textPrimary, fontSize: 16),
+          style: TextStyle(color: AppPalette.textPrimary, fontSize: 16),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, size: 18),
@@ -37,10 +37,7 @@ class GalleryScreen extends StatelessWidget {
             children: [
               const Text(
                 'Browse through our pre-selected example images.',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: HomePalette.textSecondary,
-                ),
+                style: TextStyle(fontSize: 12, color: AppPalette.textSecondary),
               ),
               const SizedBox(height: 16),
               const Text(

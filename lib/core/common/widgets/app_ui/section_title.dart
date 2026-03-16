@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:cembostyle/moduls/home/presentation/theme/home_palette.dart';
+import 'package:cembostyle/core/theme/app_palette.dart';
 
 class SectionTitle extends StatelessWidget {
   final String title;
@@ -22,9 +22,9 @@ class SectionTitle extends StatelessWidget {
         Text(
           title,
           style: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 16,
-            color: HomePalette.textPrimary,
+            fontWeight: FontWeight.w700,
+            fontSize: 18,
+            color: AppPalette.textPrimary,
           ),
         ),
         if (actionText != null)
@@ -34,8 +34,8 @@ class SectionTitle extends StatelessWidget {
               actionText!,
               style: const TextStyle(
                 fontWeight: FontWeight.w600,
-                fontSize: 12,
-                color: HomePalette.purple,
+                fontSize: 14,
+                color: AppPalette.purple,
               ),
             ),
           ),

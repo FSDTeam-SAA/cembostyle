@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:cembostyle/moduls/home/presentation/controllers/home_controller.dart';
-import 'package:cembostyle/moduls/home/presentation/theme/home_palette.dart';
+import 'package:cembostyle/moduls/home/controllers/home_controller.dart';
+import 'package:cembostyle/core/theme/app_palette.dart';
 
-class HomeBottomNav extends StatelessWidget {
-  const HomeBottomNav({super.key});
+class BottomNavBar extends StatelessWidget {
+  const BottomNavBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,18 +14,18 @@ class HomeBottomNav extends StatelessWidget {
     return SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 6, 16, 12),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
         child: Container(
-          height: 72,
-          padding: const EdgeInsets.all(8),
+          height: 70,
+          padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(28),
-            border: Border.all(color: HomePalette.cardBorder, width: 1.5),
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: AppPalette.cardBorder, width: 1.2),
             boxShadow: const [
               BoxShadow(
-                color: Color(0x1F000000),
-                blurRadius: 18,
+                color: Color(0x14000000),
+                blurRadius: 16,
                 offset: Offset(0, 6),
               ),
             ],
@@ -88,7 +88,7 @@ class _BottomNavItem extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 6),
         decoration: BoxDecoration(
-          color: isSelected ? HomePalette.purple : Colors.transparent,
+          color: isSelected ? AppPalette.purple : Colors.transparent,
           borderRadius: BorderRadius.circular(22),
         ),
         child: Column(
@@ -97,17 +97,17 @@ class _BottomNavItem extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 20,
-              color: isSelected ? Colors.white : HomePalette.textSecondary,
+              size: 22,
+              color: isSelected ? Colors.white : AppPalette.textSecondary,
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 2),
             Text(
               label,
               style: TextStyle(
                 fontSize: 12,
                 height: 1,
                 fontWeight: FontWeight.w500,
-                color: isSelected ? Colors.white : HomePalette.textSecondary,
+                color: isSelected ? Colors.white : AppPalette.textSecondary,
               ),
             ),
           ],

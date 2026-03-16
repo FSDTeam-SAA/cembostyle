@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:cembostyle/core/common/widgets/app_scaffold.dart';
-import 'package:cembostyle/moduls/home/presentation/controllers/home_controller.dart';
-import 'package:cembostyle/moduls/home/presentation/theme/home_palette.dart';
-import 'package:cembostyle/moduls/home/presentation/widgets/common/home_primary_button.dart';
+import 'package:cembostyle/moduls/home/controllers/home_controller.dart';
+import 'package:cembostyle/core/theme/app_palette.dart';
+import 'package:cembostyle/core/common/widgets/app_ui/home_primary_button.dart';
 import 'package:cembostyle/moduls/home/presentation/widgets/home_flow/stripe_success_dialog.dart';
 
 class PaymentMethodScreen extends StatefulWidget {
@@ -32,7 +32,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
         ),
         title: const Text(
           'Monthly Plan',
-          style: TextStyle(color: HomePalette.textPrimary, fontSize: 16),
+          style: TextStyle(color: AppPalette.textPrimary, fontSize: 16),
         ),
       ),
       body: SafeArea(
@@ -43,18 +43,12 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
             children: [
               const Text(
                 'Try Bheppo stencil app Monthly Plan',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: HomePalette.textSecondary,
-                ),
+                style: TextStyle(fontSize: 12, color: AppPalette.textSecondary),
               ),
               const SizedBox(height: 6),
               const Text(
                 r'Then $9.99/mo per week starting 3 March 2026',
-                style: TextStyle(
-                  fontSize: 11,
-                  color: HomePalette.textSecondary,
-                ),
+                style: TextStyle(fontSize: 11, color: AppPalette.textSecondary),
               ),
               const SizedBox(height: 20),
               const Text(
@@ -66,7 +60,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: HomePalette.cardBorder),
+                  border: Border.all(color: AppPalette.cardBorder),
                 ),
                 child: Row(
                   children: [
@@ -75,7 +69,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                       groupValue: selected,
                       onChanged: (value) =>
                           setState(() => selected = value ?? 0),
-                      activeColor: HomePalette.purple,
+                      activeColor: AppPalette.purple,
                     ),
                     const SizedBox(width: 8),
                     const Text(

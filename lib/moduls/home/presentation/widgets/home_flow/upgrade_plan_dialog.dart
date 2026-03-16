@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:cembostyle/moduls/home/presentation/theme/home_palette.dart';
-import 'package:cembostyle/moduls/home/presentation/widgets/common/home_primary_button.dart';
+import 'package:cembostyle/core/theme/app_palette.dart';
+import 'package:cembostyle/core/common/widgets/app_ui/home_primary_button.dart';
 
 class UpgradePlanDialog extends StatelessWidget {
   final VoidCallback onUpgrade;
@@ -32,14 +32,14 @@ class UpgradePlanDialog extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 16,
-                color: HomePalette.purple,
+                color: AppPalette.purple,
               ),
             ),
             const SizedBox(height: 12),
             const Text(
               r'Your monthly subscription begins after 3 days. Cancel anytime before trial ends, no charges. After trial: $9.99/month',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12, color: HomePalette.textSecondary),
+              style: TextStyle(fontSize: 12, color: AppPalette.textSecondary),
             ),
             const SizedBox(height: 16),
             HomePrimaryButton(

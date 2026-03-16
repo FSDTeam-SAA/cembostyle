@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:cembostyle/moduls/home/presentation/theme/home_palette.dart';
+import 'package:cembostyle/core/theme/app_palette.dart';
 
 class DetailLevelSlider extends StatelessWidget {
   final int value;
@@ -19,10 +19,10 @@ class DetailLevelSlider extends StatelessWidget {
       children: [
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
-            activeTrackColor: HomePalette.purple,
-            inactiveTrackColor: HomePalette.divider,
-            thumbColor: HomePalette.purple,
-            overlayColor: HomePalette.purple.withOpacity(0.1),
+            activeTrackColor: AppPalette.purple,
+            inactiveTrackColor: AppPalette.divider,
+            thumbColor: AppPalette.purple,
+            overlayColor: AppPalette.purple.withOpacity(0.1),
             trackHeight: 2,
           ),
           child: Slider(

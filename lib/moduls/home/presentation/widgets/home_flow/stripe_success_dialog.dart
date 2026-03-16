@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:cembostyle/moduls/home/presentation/theme/home_palette.dart';
+import 'package:cembostyle/core/theme/app_palette.dart';
 
 class StripeSuccessDialog extends StatelessWidget {
   const StripeSuccessDialog({super.key});
@@ -19,7 +19,7 @@ class StripeSuccessDialog extends StatelessWidget {
               width: 90,
               height: 90,
               decoration: BoxDecoration(
-                color: HomePalette.purple,
+                color: AppPalette.purple,
                 shape: BoxShape.circle,
               ),
               child: const Icon(Icons.shield, size: 44, color: Colors.white),
@@ -31,17 +31,17 @@ class StripeSuccessDialog extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 16,
-                color: HomePalette.purple,
+                color: AppPalette.purple,
               ),
             ),
             const SizedBox(height: 10),
             const Text(
               'Your 3 day free trial started now you will be redirected to the Home page in a few seconds.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12, color: HomePalette.textSecondary),
+              style: TextStyle(fontSize: 12, color: AppPalette.textSecondary),
             ),
             const SizedBox(height: 16),
-            const CircularProgressIndicator(color: HomePalette.purple),
+            const CircularProgressIndicator(color: AppPalette.purple),
           ],
         ),
       ),

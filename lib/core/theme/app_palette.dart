@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class HomePalette {
+class AppPalette {
   static const Color purple = Color(0xFF7B2CF5);
   static const Color purpleDark = Color(0xFF5F1AE6);
   static const Color purpleSoft = Color(0xFFF2E9FF);
