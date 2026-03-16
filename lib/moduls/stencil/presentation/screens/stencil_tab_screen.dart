@@ -9,8 +9,8 @@ import 'package:cembostyle/core/common/widgets/app_ui/recent_activity_tile.dart'
 import 'package:cembostyle/core/common/widgets/app_ui/section_title.dart';
 import 'package:cembostyle/core/common/widgets/app_ui/upload_card.dart';
 
-class StencilTabScreen extends StatelessWidget {
-  const StencilTabScreen({super.key});
+class StencilScreen extends StatelessWidget {
+  const StencilScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -58,20 +58,19 @@ class StencilTabScreen extends StatelessWidget {
             const SizedBox(height: 16),
             const SectionTitle(title: 'Recent Stencil Activity'),
             const SizedBox(height: 12),
-            Obx(() {
-              return Column(
-                children: controller.recentActivities
-                    .map(
-                      (item) => RecentActivityTile(
-                        title: item.title,
-                        style: item.style,
-                        date: item.date,
-                        thumbnailUrl: item.thumbnailUrl,
-                      ),
-                    )
-                    .toList(),
-              );
-            }),
+            Column(
+              children: controller.recentActivities
+                  .take(3)
+                  .map(
+                    (item) => RecentActivityTile(
+                      title: item.title,
+                      style: item.style,
+                      date: item.date,
+                      thumbnailUrl: item.thumbnailUrl,
+                    ),
+                  )
+                  .toList(),
+            ),
           ],
         ),
       ),

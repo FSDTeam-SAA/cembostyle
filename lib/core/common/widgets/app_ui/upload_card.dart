@@ -56,7 +56,7 @@ class UploadCard extends StatelessWidget {
                   icon: const Icon(
                     Icons.photo_library_outlined,
                     size: 18,
-                    color: AppPalette.purple,
+                    color: AppPalette.black,
                   ),
                   onTap: onGalleryTap,
                   height: 44,
@@ -73,7 +73,7 @@ class UploadCard extends StatelessWidget {
                   icon: const Icon(
                     Icons.photo_camera_outlined,
                     size: 18,
-                    color: AppPalette.purple,
+                    color: AppPalette.black,
                   ),
                   onTap: onCameraTap,
                   height: 44,

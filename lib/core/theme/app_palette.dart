@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppPalette {
   static const Color purple = Color(0xFF7B2CF5);
+  static const Color black = Color.fromARGB(255, 0, 0, 0);
   static const Color purpleDark = Color(0xFF5F1AE6);
   static const Color purpleSoft = Color(0xFFF2E9FF);
   static const Color purpleBorder = Color(0xFFE4D3FF);

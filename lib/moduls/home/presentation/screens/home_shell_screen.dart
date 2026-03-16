@@ -20,7 +20,7 @@ class HomeShellScreen extends StatelessWidget {
       body: Obx(() {
         return IndexedStack(
           index: controller.bottomNavIndex.value,
-          children: const [HomeScreen(), StencilTabScreen(), ProfileScreen()],
+          children: const [HomeScreen(), StencilScreen(), ProfileScreen()],
         );
       }),
       bottomNavigationBar: const BottomNavBar(),
