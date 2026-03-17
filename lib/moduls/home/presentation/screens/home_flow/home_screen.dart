@@ -11,6 +11,8 @@ import 'package:cembostyle/core/common/widgets/app_ui/upload_card.dart';
 import 'package:cembostyle/moduls/home/presentation/widgets/home_flow/home_hero_card.dart';
 import 'package:cembostyle/moduls/home/presentation/widgets/home_flow/upgrade_plan_dialog.dart';
 
+import '../../../../stencil/presentation/routes/stencil_routes.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -84,44 +86,56 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 16),
             HomeHeroCard(onTryGallery: () => Get.toNamed(HomeRoutes.gallery)),
             const SizedBox(height: 18),
-            UploadCard(
-              onGalleryTap: () {
-                if (!controller.hasActivePlan.value) {
-                  showDialog(
-                    context: context,
-                    builder: (_) => UpgradePlanDialog(
-                      onUpgrade: () => Get.toNamed(HomeRoutes.pricing),
-                    ),
-                  );
-                  return;
-                }
-              },
-              onCameraTap: () {
-                if (!controller.hasActivePlan.value) {
-                  showDialog(
-                    context: context,
-                    builder: (_) => UpgradePlanDialog(
-                      onUpgrade: () => Get.toNamed(HomeRoutes.pricing),
-                    ),
-                  );
-                  return;
-                }
-              },
+
+             UploadCard(
+              onGalleryTap: () => Get.toNamed(StencilRoutes.customizeStyle),
+              onCameraTap: () => Get.toNamed(StencilRoutes.customizeStyle),
             ),
+            // UploadCard(
+            //   onGalleryTap: () {
+            //     if (!controller.hasActivePlan.value) {
+            //       showDialog(
+            //         context: context,
+            //         builder: (_) => UpgradePlanDialog(
+            //           onUpgrade: () => Get.toNamed(HomeRoutes.pricing),
+            //         ),
+            //       );
+            //       return;
+            //     }
+            //   },
+            //   onCameraTap: () {
+            //     if (!controller.hasActivePlan.value) {
+            //       showDialog(
+            //         context: context,
+            //         builder: (_) => UpgradePlanDialog(
+            //           onUpgrade: () => Get.toNamed(HomeRoutes.pricing),
+            //         ),
+            //       );
+            //       return;
+            //     }
+            //   },
+            // ),
             const SizedBox(height: 18),
             const SectionTitle(title: 'Quick Action', actionText: 'See All'),
             const SizedBox(height: 14),
             Row(
-              children: const [
+              children: [
                 Expanded(
                   child: QuickActionCard(
                     title: 'My Stencils',
                     icon: Icons.folder_copy_outlined,
+                    onTap: () => Get.toNamed(HomeRoutes.myStencils),
                   ),
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Expanded(
-                  child: QuickActionCard(title: 'Total Stencil', value: '05'),
+                  child: Obx(() {
+                    final total = controller.recentActivities.length;
+                    return QuickActionCard(
+                      title: 'Total Stencil',
+                      value: total.toString().padLeft(2, '0'),
+                    );
+                  }),
                 ),
               ],
             ),
