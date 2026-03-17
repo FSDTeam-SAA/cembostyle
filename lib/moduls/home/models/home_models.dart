@@ -11,6 +11,8 @@ class GalleryItem {
   final String title;
   final String imageUrl;
   final String resultImageUrl;
+  final List<String> availableThemes;
+  final List<String> styleLevel;
 
   const GalleryItem({
     required this.id,
@@ -18,7 +20,31 @@ class GalleryItem {
     required this.title,
     required this.imageUrl,
     required this.resultImageUrl,
+    this.availableThemes = const [],
+    this.styleLevel = const [],
   });
+
+  factory GalleryItem.fromApi(Map<String, dynamic> json) {
+    final image = json['image'] as Map<String, dynamic>?;
+    final imageUrl = image?['url'] as String? ?? '';
+    final publicId = image?['publicId'] as String?;
+    final category = json['category'] as String? ?? '';
+    final availableThemes =
+        (json['availableThemes'] as List?)?.whereType<String>().toList() ??
+        const [];
+    final styleLevel =
+        (json['styleLevel'] as List?)?.whereType<String>().toList() ?? const [];
+
+    return GalleryItem(
+      id: (json['_id'] as String?) ?? publicId ?? imageUrl,
+      categoryId: category,
+      title: category.isNotEmpty ? category : (publicId ?? 'Gallery Item'),
+      imageUrl: imageUrl,
+      resultImageUrl: imageUrl,
+      availableThemes: availableThemes,
+      styleLevel: styleLevel,
+    );
+  }
 }
 
 class ActivityItem {

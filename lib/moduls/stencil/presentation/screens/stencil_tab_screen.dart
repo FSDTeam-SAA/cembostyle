@@ -58,19 +58,91 @@ class StencilScreen extends StatelessWidget {
             const SizedBox(height: 16),
             const SectionTitle(title: 'Recent Stencil Activity'),
             const SizedBox(height: 12),
-            Column(
-              children: controller.recentActivities
-                  .take(3)
-                  .map(
+            Obx(() {
+              if (controller.isRecentActivityLoading.value) {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 24),
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              final items = controller.recentActivities;
+              final hasError = controller.recentActivityError.value.isNotEmpty;
+
+              if (items.isEmpty) {
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          hasError
+                              ? controller.recentActivityError.value
+                              : 'No recent stencil activity yet.',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: AppPalette.textSecondary,
+                            fontSize: 12,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        TextButton(
+                          onPressed: controller.refreshRecentActivities,
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+
+              final limitedItems = items.take(3).toList();
+
+              return Column(
+                children: [
+                  if (hasError)
+                    Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(bottom: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppPalette.purple.withOpacity(0.08),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        children: [
+                          const Expanded(
+                            child: Text(
+                              'Could not refresh activity. Showing last saved data.',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: AppPalette.textSecondary,
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: controller.refreshRecentActivities,
+                            child: const Text('Refresh'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ...limitedItems.map(
                     (item) => RecentActivityTile(
                       title: item.title,
                       style: item.style,
                       date: item.date,
                       thumbnailUrl: item.thumbnailUrl,
+                      splitPreview: false,
                     ),
-                  )
-                  .toList(),
-            ),
+                  ),
+                ],
+              );
+            }),
           ],
         ),
       ),
