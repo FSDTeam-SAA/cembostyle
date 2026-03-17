@@ -32,7 +32,7 @@ class GalleryScreen extends StatelessWidget {
             fontWeight: FontWeight.w800,
           ),
         ),
-        
+
         leading: BackButton(
           color: AppPalette.textPrimary,
           onPressed: () => Get.back(),
@@ -69,8 +69,7 @@ class GalleryScreen extends StatelessWidget {
                         child: CategoryChip(
                           text: item.title,
                           isSelected: selected,
-                          onTap: () =>
-                              controller.selectedCategoryIndex.value = index,
+                          onTap: () => controller.selectCategory(index),
                         ),
                       );
                     }),
@@ -80,36 +79,106 @@ class GalleryScreen extends StatelessWidget {
               const SizedBox(height: 12),
               Expanded(
                 child: Obx(() {
-                  final selectedId = controller
-                      .categories[controller.selectedCategoryIndex.value]
-                      .id;
-                  final filteredItems = controller.galleryItems
-                      .where((item) => item.categoryId == selectedId)
-                      .toList();
+                  if (controller.isGalleryLoading.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                  return GridView.builder(
-                    itemCount: filteredItems.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 8,
-                      crossAxisSpacing: 8,
-                      childAspectRatio: 1,
-                    ),
-                    itemBuilder: (context, index) {
-                      final item = filteredItems[index];
-                      return GestureDetector(
-                        onTap: () =>
-                            Get.toNamed(HomeRoutes.details, arguments: item),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: AppCachedImage(
-                            imageUrl: item.imageUrl,
-                            onTap: () {},
+                  final hasError = controller.galleryError.value.isNotEmpty;
+                  final items = controller.galleryItems;
+
+                  if (items.isEmpty) {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              hasError
+                                  ? controller.galleryError.value
+                                  : 'No images found for this category.',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: AppPalette.textSecondary,
+                                fontSize: 12,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            TextButton(
+                              onPressed: controller.refreshGallery,
+                              child: const Text('Retry'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+
+                  return Column(
+                    children: [
+                      if (hasError)
+                        Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.only(bottom: 8),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppPalette.purple.withOpacity(0.08),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            children: [
+                              const Expanded(
+                                child: Text(
+                                  'Some images may be outdated. Pull to refresh.',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: AppPalette.textSecondary,
+                                  ),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: controller.refreshGallery,
+                                child: const Text('Refresh'),
+                              ),
+                            ],
                           ),
                         ),
-                      );
-                    },
+                      Expanded(
+                        child: RefreshIndicator(
+                          onRefresh: controller.refreshGallery,
+                          child: GridView.builder(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            itemCount: items.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 8,
+                                  crossAxisSpacing: 8,
+                                  childAspectRatio: 1,
+                                ),
+                            itemBuilder: (context, index) {
+                              final item = items[index];
+                              return GestureDetector(
+                                onTap: () => Get.toNamed(
+                                  HomeRoutes.details,
+                                  arguments: item,
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: AppCachedImage(
+                                    imageUrl: item.imageUrl,
+                                    onTap: () {},
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   );
                 }),
               ),

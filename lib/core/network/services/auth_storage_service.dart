@@ -114,6 +114,7 @@ class AuthStorageService {
       _secureStorage.delete(key: KeyConstants.userId),
       _secureStorage.delete(key: KeyConstants.role),
     ]);
+
   }
 
   // Check if user ID exists

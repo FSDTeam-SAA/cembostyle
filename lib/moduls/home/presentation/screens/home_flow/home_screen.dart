@@ -11,6 +11,8 @@ import 'package:cembostyle/core/common/widgets/app_ui/upload_card.dart';
 import 'package:cembostyle/moduls/home/presentation/widgets/home_flow/home_hero_card.dart';
 import 'package:cembostyle/moduls/home/presentation/widgets/home_flow/upgrade_plan_dialog.dart';
 
+import '../../../../stencil/presentation/routes/stencil_routes.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -84,68 +86,148 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 16),
             HomeHeroCard(onTryGallery: () => Get.toNamed(HomeRoutes.gallery)),
             const SizedBox(height: 18),
-            UploadCard(
-              onGalleryTap: () {
-                if (!controller.hasActivePlan.value) {
-                  showDialog(
-                    context: context,
-                    builder: (_) => UpgradePlanDialog(
-                      onUpgrade: () => Get.toNamed(HomeRoutes.pricing),
-                    ),
-                  );
-                  return;
-                }
-              },
-              onCameraTap: () {
-                if (!controller.hasActivePlan.value) {
-                  showDialog(
-                    context: context,
-                    builder: (_) => UpgradePlanDialog(
-                      onUpgrade: () => Get.toNamed(HomeRoutes.pricing),
-                    ),
-                  );
-                  return;
-                }
-              },
+
+             UploadCard(
+              onGalleryTap: () => Get.toNamed(StencilRoutes.customizeStyle),
+              onCameraTap: () => Get.toNamed(StencilRoutes.customizeStyle),
             ),
+            // UploadCard(
+            //   onGalleryTap: () {
+            //     if (!controller.hasActivePlan.value) {
+            //       showDialog(
+            //         context: context,
+            //         builder: (_) => UpgradePlanDialog(
+            //           onUpgrade: () => Get.toNamed(HomeRoutes.pricing),
+            //         ),
+            //       );
+            //       return;
+            //     }
+            //   },
+            //   onCameraTap: () {
+            //     if (!controller.hasActivePlan.value) {
+            //       showDialog(
+            //         context: context,
+            //         builder: (_) => UpgradePlanDialog(
+            //           onUpgrade: () => Get.toNamed(HomeRoutes.pricing),
+            //         ),
+            //       );
+            //       return;
+            //     }
+            //   },
+            // ),
             const SizedBox(height: 18),
             const SectionTitle(title: 'Quick Action', actionText: 'See All'),
             const SizedBox(height: 14),
             Row(
-              children: const [
+              children: [
                 Expanded(
                   child: QuickActionCard(
                     title: 'My Stencils',
                     icon: Icons.folder_copy_outlined,
+                    onTap: () => Get.toNamed(HomeRoutes.myStencils),
                   ),
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Expanded(
-                  child: QuickActionCard(
-                    title: 'Total Stencil',
-                    value: '05',
-                  ),
+                  child: Obx(() {
+                    final total = controller.recentActivities.length;
+                    return QuickActionCard(
+                      title: 'Total Stencil',
+                      value: total.toString().padLeft(2, '0'),
+                    );
+                  }),
                 ),
               ],
             ),
             const SizedBox(height: 18),
             const SectionTitle(title: 'Recent Activity'),
             const SizedBox(height: 14),
-            Column(
-              children: controller.recentActivities
-                  .asMap()
-                  .entries
-                  .map(
-                    (entry) => RecentActivityTile(
-                      title: entry.value.title,
-                      style: entry.value.style,
-                      date: entry.value.date,
-                      thumbnailUrl: entry.value.thumbnailUrl,
-                      highlightStyle: entry.key == 0,
+            Obx(() {
+              if (controller.isRecentActivityLoading.value) {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 24),
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              final items = controller.recentActivities;
+              final hasError = controller.recentActivityError.value.isNotEmpty;
+
+              if (items.isEmpty) {
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          hasError
+                              ? controller.recentActivityError.value
+                              : 'No recent activity yet.',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: AppPalette.textSecondary,
+                            fontSize: 12,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        TextButton(
+                          onPressed: controller.refreshRecentActivities,
+                          child: const Text('Retry'),
+                        ),
+                      ],
                     ),
-                  )
-                  .toList(),
-            ),
+                  ),
+                );
+              }
+
+              final limitedItems = items.take(3).toList();
+
+              return Column(
+                children: [
+                  if (hasError)
+                    Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(bottom: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppPalette.purple.withOpacity(0.08),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        children: [
+                          const Expanded(
+                            child: Text(
+                              'Could not refresh activity. Showing last saved data.',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: AppPalette.textSecondary,
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: controller.refreshRecentActivities,
+                            child: const Text('Refresh'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ...List.generate(limitedItems.length, (index) {
+                    final item = limitedItems[index];
+                    return RecentActivityTile(
+                      title: item.title,
+                      style: item.style,
+                      date: item.date,
+                      thumbnailUrl: item.thumbnailUrl,
+                      highlightStyle: index == 0,
+                    );
+                  }),
+                ],
+              );
+            }),
           ],
         ),
       ),
