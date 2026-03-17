@@ -4,4 +4,5 @@ class HomeRoutes {
   static const String details = '/home/details';
   static const String pricing = '/home/pricing';
   static const String payment = '/home/payment';
+  static const String myStencils = '/home/my-stencils';
 }

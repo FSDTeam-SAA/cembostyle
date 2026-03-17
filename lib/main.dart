@@ -15,6 +15,7 @@ import 'package:cembostyle/moduls/auth/presentation/screens/splash_screen.dart';
 import 'package:cembostyle/moduls/home/presentation/routes/home_routes.dart';
 import 'package:cembostyle/moduls/home/presentation/screens/home_flow/details_screen.dart';
 import 'package:cembostyle/moduls/home/presentation/screens/home_flow/gallery_screen.dart';
+import 'package:cembostyle/moduls/home/presentation/screens/home_flow/my_stencils_screen.dart';
 import 'package:cembostyle/moduls/home/presentation/screens/home_flow/payment_method_screen.dart';
 import 'package:cembostyle/moduls/home/presentation/screens/home_flow/pricing_plan_screen.dart';
 import 'package:cembostyle/moduls/home/presentation/screens/home_shell_screen.dart';
@@ -62,6 +63,10 @@ class MyApp extends StatelessWidget {
         GetPage(name: HomeRoutes.home, page: () => const HomeShellScreen()),
         GetPage(name: HomeRoutes.gallery, page: () => const GalleryScreen()),
         GetPage(name: HomeRoutes.details, page: () => const DetailsScreen()),
+        GetPage(
+          name: HomeRoutes.myStencils,
+          page: () => const MyStencilsScreen(),
+        ),
         GetPage(
           name: HomeRoutes.pricing,
           page: () => const PricingPlanScreen(),

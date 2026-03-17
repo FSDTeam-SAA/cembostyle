@@ -18,9 +18,12 @@ class DetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
     final GalleryItem? item = Get.arguments as GalleryItem?;
-    final image = item?.imageUrl ?? controller.galleryItems.first.imageUrl;
+    final fallbackItem = controller.galleryItems.isNotEmpty
+        ? controller.galleryItems.first
+        : null;
+    final image = item?.imageUrl ?? fallbackItem?.imageUrl ?? '';
     final resultImage =
-        item?.resultImageUrl ?? controller.galleryItems.first.resultImageUrl;
+        item?.resultImageUrl ?? fallbackItem?.resultImageUrl ?? image;
 
     return AppScaffold(
       removePadding: true,

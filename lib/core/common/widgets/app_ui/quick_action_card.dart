@@ -6,18 +6,20 @@ class QuickActionCard extends StatelessWidget {
   final String title;
   final String? value;
   final IconData? icon;
+  final VoidCallback? onTap;
 
   const QuickActionCard({
     super.key,
     required this.title,
     this.value,
     this.icon,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final hasValue = value != null && value!.isNotEmpty;
-    return Container(
+    final content = Container(
       padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -58,5 +60,7 @@ class QuickActionCard extends StatelessWidget {
         ],
       ),
     );
+    if (onTap == null) return content;
+    return GestureDetector(onTap: onTap, child: content);
   }
 }
