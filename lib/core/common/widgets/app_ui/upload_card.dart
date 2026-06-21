@@ -20,29 +20,32 @@ class UploadCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        DashedBorderContainer(
-          borderRadius: 18,
-          borderColor: AppPalette.purple,
-          dashLength: 6,
-          gapLength: 4,
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
-            color: const Color(0xFFF8F6FF),
-            child: Column(
-              children: const [
-                Icon(Icons.ios_share, color: AppPalette.textPrimary, size: 26),
-                SizedBox(height: 8),
-                Text(
-                  'Upload Your own Image',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  '3 Day free-trial experience',
-                  style: TextStyle(fontSize: 12, color: AppPalette.textSecondary),
-                ),
-              ],
+        GestureDetector(
+          onTap: onGalleryTap,
+          child: DashedBorderContainer(
+            borderRadius: 18,
+            borderColor: AppPalette.purple,
+            dashLength: 6,
+            gapLength: 4,
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
+              color: const Color(0xFFF8F6FF),
+              child: Column(
+                children: const [
+                  Icon(Icons.ios_share, color: AppPalette.textPrimary, size: 26),
+                  SizedBox(height: 8),
+                  Text(
+                    'Upload Your own Image',
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    'Tap to select from gallery',
+                    style: TextStyle(fontSize: 12, color: AppPalette.textSecondary),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

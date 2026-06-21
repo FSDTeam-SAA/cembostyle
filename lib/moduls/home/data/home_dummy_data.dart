@@ -3,9 +3,8 @@ import '../models/home_models.dart';
 class HomeDummyData {
   static const List<CategoryItem> categories = [
     CategoryItem(id: 'outline', title: 'Outline'),
-    CategoryItem(id: 'realism', title: 'Realism Map'),
-    CategoryItem(id: 'detail', title: 'Detail Guide'),
-    CategoryItem(id: 'halftone', title: 'Halftone'),
+    CategoryItem(id: 'realism', title: 'Realism'),
+    CategoryItem(id: 'printhatch', title: 'PrintHatch'),
   ];
 
   static const List<GalleryItem> galleryItems = [
@@ -25,14 +24,14 @@ class HomeDummyData {
     ),
     GalleryItem(
       id: 'g3',
-      categoryId: 'detail',
+      categoryId: 'printhatch',
       title: 'Charcoal Muse',
       imageUrl: 'https://picsum.photos/id/1000/600/800',
       resultImageUrl: 'https://picsum.photos/id/1027/600/800',
     ),
     GalleryItem(
       id: 'g4',
-      categoryId: 'halftone',
+      categoryId: 'realism',
       title: 'Mountain Path',
       imageUrl: 'https://picsum.photos/id/1018/600/800',
       resultImageUrl: 'https://picsum.photos/id/1016/600/800',
@@ -53,14 +52,14 @@ class HomeDummyData {
     ),
     GalleryItem(
       id: 'g7',
-      categoryId: 'detail',
+      categoryId: 'printhatch',
       title: 'Golden Lion',
       imageUrl: 'https://picsum.photos/id/1070/600/800',
       resultImageUrl: 'https://picsum.photos/id/1069/600/800',
     ),
     GalleryItem(
       id: 'g8',
-      categoryId: 'halftone',
+      categoryId: 'realism',
       title: 'Regal Portrait',
       imageUrl: 'https://picsum.photos/id/1062/600/800',
       resultImageUrl: 'https://picsum.photos/id/1050/600/800',
@@ -103,8 +102,8 @@ class HomeDummyData {
     PlanOption(
       id: 'yearly',
       title: 'Yearly Plan',
-      price: r'US$8.25',
-      periodLabel: '/month',
+      price: r'US$99',
+      periodLabel: '/year',
       badge: '3-Day Free Trial',
       savings: r'Save $20.88 per year!',
     ),
@@ -112,11 +111,7 @@ class HomeDummyData {
 
   static const List<ColorThemeOption> colorThemes = [
     ColorThemeOption(id: 'black', title: 'Tattoo Black & Grey'),
-    ColorThemeOption(id: 'stencil_violet', title: 'Stencil Violet'),
-    ColorThemeOption(id: 'cobalt', title: 'Stencil Cobalt Blue'),
     ColorThemeOption(id: 'red_black', title: 'Red & Black Contrast'),
-    ColorThemeOption(id: 'deep_blue', title: 'Deep Blue Ink'),
-    ColorThemeOption(id: 'sepia', title: 'Sepia Draft'),
-    ColorThemeOption(id: 'super', title: 'Super Contrast'),
+    ColorThemeOption(id: 'cobalt', title: 'Stencil Cobalt Blue'),
   ];
 }

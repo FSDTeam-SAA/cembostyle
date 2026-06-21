@@ -30,7 +30,7 @@ class GeneratingDialog extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             const Text(
-              'Generating Your Stencil!',
+              'Bheppo Stencil AI',
               style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 16,
@@ -39,7 +39,7 @@ class GeneratingDialog extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             const Text(
-              'AI is processing your image this usually takes a few seconds.',
+              'Bheppo Stencil Ai processing your image. Please wait.',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 12, color: AppPalette.textSecondary),
             ),
