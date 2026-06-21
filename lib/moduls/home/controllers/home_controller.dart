@@ -384,14 +384,19 @@ class HomeController extends GetxController {
   }
 
   ActivityItem _mapToActivityItem(StencilRecord record) {
+    final stencilThumb = record.baseStencilImageUrl.isNotEmpty
+        ? record.baseStencilImageUrl
+        : record.stencilImageUrl;
     return ActivityItem(
       id: record.id,
       title: _buildTitle(record.status),
       style: _buildStyleLabel(record.style, record.status),
       date: _formatDate(record.createdAt),
-      thumbnailUrl: record.originalImageUrl.isNotEmpty
-          ? record.originalImageUrl
-          : record.stencilImageUrl,
+      thumbnailUrl: stencilThumb.isNotEmpty
+          ? stencilThumb
+          : record.originalImageUrl,
+      originalImageUrl: record.originalImageUrl,
+      stencilImageUrl: stencilThumb,
     );
   }
 

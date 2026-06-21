@@ -432,17 +432,20 @@ class StencilController extends GetxController {
   }
 
   StencilActivityItem _mapToStencilActivity(StencilRecord record) {
+    final stencilThumb = record.baseStencilImageUrl.isNotEmpty
+        ? record.baseStencilImageUrl
+        : record.stencilImageUrl;
     return StencilActivityItem(
       id: record.id,
       title: _buildTitle(record.status),
       style: _buildStyleLabel(record.style, record.status),
       date: _formatDate(record.createdAt),
-      thumbnailUrl: record.stencilImageUrl.isNotEmpty
-          ? record.stencilImageUrl
+      thumbnailUrl: stencilThumb.isNotEmpty
+          ? stencilThumb
           : record.originalImageUrl,
       styleName: record.style,
       originalImageUrl: record.originalImageUrl,
-      stencilImageUrl: record.stencilImageUrl,
+      stencilImageUrl: stencilThumb,
       baseStencilImageUrl: record.baseStencilImageUrl,
       status: record.status,
       errorMessage: record.errorMessage,

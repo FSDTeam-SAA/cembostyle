@@ -53,6 +53,8 @@ class ActivityItem {
   final String style;
   final String date;
   final String thumbnailUrl;
+  final String originalImageUrl;
+  final String stencilImageUrl;
 
   const ActivityItem({
     required this.id,
@@ -60,6 +62,8 @@ class ActivityItem {
     required this.style,
     required this.date,
     required this.thumbnailUrl,
+    this.originalImageUrl = '',
+    this.stencilImageUrl = '',
   });
 }
 

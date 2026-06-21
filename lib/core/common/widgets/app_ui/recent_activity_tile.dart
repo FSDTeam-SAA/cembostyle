@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cembostyle/core/common/widgets/app_cached_image.dart';
@@ -8,6 +9,7 @@ class RecentActivityTile extends StatelessWidget {
   final String style;
   final String date;
   final String thumbnailUrl;
+  final String originalImageUrl;
   final bool highlightStyle;
   final bool splitPreview;
 
@@ -17,6 +19,7 @@ class RecentActivityTile extends StatelessWidget {
     required this.style,
     required this.date,
     required this.thumbnailUrl,
+    this.originalImageUrl = '',
     this.highlightStyle = false,
     this.splitPreview = true,
   });
@@ -53,52 +56,11 @@ class RecentActivityTile extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(previewRadius - 2),
-              child: splitPreview
-                  ? Row(
-                      children: [
-                        Expanded(
-                          child: AppCachedImage(
-                            imageUrl: thumbnailUrl,
-                            width: previewSize / 2,
-                            height: previewSize,
-                            fit: BoxFit.cover,
-                            onTap: () {},
-                          ),
-                        ),
-                        Expanded(
-                          child: ColorFiltered(
-                            colorFilter: const ColorFilter.matrix([
-                              0.2126,
-                              0.7152,
-                              0.0722,
-                              0,
-                              0,
-                              0.2126,
-                              0.7152,
-                              0.0722,
-                              0,
-                              0,
-                              0.2126,
-                              0.7152,
-                              0.0722,
-                              0,
-                              0,
-                              0,
-                              0,
-                              0,
-                              1,
-                              0,
-                            ]),
-                            child: AppCachedImage(
-                              imageUrl: thumbnailUrl,
-                              width: previewSize / 2,
-                              height: previewSize,
-                              fit: BoxFit.cover,
-                              onTap: () {},
-                            ),
-                          ),
-                        ),
-                      ],
+              child: splitPreview && originalImageUrl.isNotEmpty
+                  ? _SplitPreview(
+                      originalUrl: originalImageUrl,
+                      stencilUrl: thumbnailUrl,
+                      size: previewSize,
                     )
                   : AppCachedImage(
                       imageUrl: thumbnailUrl,
@@ -147,4 +109,63 @@ class RecentActivityTile extends StatelessWidget {
       ),
     );
   }
+}
+
+class _SplitPreview extends StatelessWidget {
+  final String originalUrl;
+  final String stencilUrl;
+  final double size;
+
+  const _SplitPreview({
+    required this.originalUrl,
+    required this.stencilUrl,
+    required this.size,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: CustomPaint(
+        size: Size(size, size),
+        painter: _SplitImagePainter(),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: _buildHalf(originalUrl, Alignment.centerLeft),
+            ),
+            Positioned(
+              left: size / 2,
+              top: 0,
+              right: 0,
+              bottom: 0,
+              child: _buildHalf(stencilUrl, Alignment.centerRight),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHalf(String url, Alignment alignment) {
+    return CachedNetworkImage(
+      imageUrl: url,
+      fit: BoxFit.cover,
+      alignment: alignment,
+      placeholder: (context, url) => Container(color: Colors.grey.shade200),
+      errorWidget: (context, url, error) => Container(
+        color: Colors.grey.shade200,
+        child: const Icon(Icons.error, color: Colors.red, size: 20),
+      ),
+    );
+  }
+}
+
+class _SplitImagePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {}
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

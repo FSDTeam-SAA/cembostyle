@@ -233,7 +233,10 @@ class HomeScreen extends StatelessWidget {
                         title: item.title,
                         style: item.style,
                         date: item.date,
-                        thumbnailUrl: item.thumbnailUrl,
+                        thumbnailUrl: item.stencilImageUrl.isNotEmpty
+                            ? item.stencilImageUrl
+                            : item.thumbnailUrl,
+                        originalImageUrl: item.originalImageUrl,
                         highlightStyle: index == 0,
                       );
                     }),

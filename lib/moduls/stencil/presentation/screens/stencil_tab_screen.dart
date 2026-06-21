@@ -164,8 +164,10 @@ class StencilScreen extends StatelessWidget {
                           title: item.title,
                           style: item.style,
                           date: item.date,
-                          thumbnailUrl: item.thumbnailUrl,
-                          splitPreview: false,
+                          thumbnailUrl: item.stencilImageUrl.isNotEmpty
+                              ? item.stencilImageUrl
+                              : item.thumbnailUrl,
+                          originalImageUrl: item.originalImageUrl,
                         ),
                       ),
                     ),
