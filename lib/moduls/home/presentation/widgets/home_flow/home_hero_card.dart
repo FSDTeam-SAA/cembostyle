@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import 'package:cembostyle/core/common/widgets/app_cached_image.dart';
+import 'package:cembostyle/core/common/constants/app_images.dart';
 import 'package:cembostyle/core/common/widgets/app_ui/home_primary_button.dart';
 
 class HomeHeroCard extends StatelessWidget {
-  final VoidCallback onTryGallery;
+  final VoidCallback onUserGuide;
   final double height;
 
   const HomeHeroCard({
     super.key,
-    required this.onTryGallery,
+    required this.onUserGuide,
     this.height = 170,
   });
 
@@ -34,12 +34,11 @@ class HomeHeroCard extends StatelessWidget {
             ColorFiltered(
               colorFilter:
                   const ColorFilter.mode(Colors.grey, BlendMode.saturation),
-              child: AppCachedImage(
-                imageUrl: 'https://picsum.photos/id/1074/900/600',
+              child: Image.asset(
+                AppImages.homeGenerateTattoBackground,
                 height: height,
                 width: double.infinity,
-                borderRadius: BorderRadius.circular(radius),
-                onTap: () {},
+                fit: BoxFit.cover,
               ),
             ),
             Container(
@@ -48,10 +47,10 @@ class HomeHeroCard extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Colors.black.withOpacity(0.68),
-                    Colors.black.withOpacity(0.35),
+                    Colors.black.withValues(alpha: 0.78),
+                    Colors.black.withValues(alpha: 0.52),
                   ],
-                  begin: Alignment.bottomLeft,
+                  begin: Alignment.bottomCenter,
                   end: Alignment.topRight,
                 ),
               ),
@@ -82,11 +81,11 @@ class HomeHeroCard extends StatelessWidget {
                     ),
                     const Spacer(),
                     HomePrimaryButton(
-                      text: 'Try the Gallery for free',
+                      text: 'User Guide',
                       height: 42,
                       radius: 24,
                       width: double.infinity,
-                      onTap: onTryGallery,
+                      onTap: onUserGuide,
                     ),
                   ],
                 ),
