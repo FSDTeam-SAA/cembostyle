@@ -137,7 +137,9 @@ class UserProfile {
       return 'CS';
     }
 
-    final parts = trimmed.split(RegExp(r'\s+')).where((part) => part.isNotEmpty);
+    final parts = trimmed
+        .split(RegExp(r'\s+'))
+        .where((part) => part.isNotEmpty);
     final initials = parts.take(2).map((part) => part[0].toUpperCase()).join();
     return initials.isEmpty ? 'CS' : initials;
   }
@@ -163,8 +165,8 @@ class PlanOption {
   bool get isYearly => id == 'yearly';
 
   String get checkoutHeadline => isYearly
-      ? 'Start your yearly Cembostyle plan'
-      : 'Start your monthly Cembostyle plan';
+      ? 'Start your yearly Bheppo Stencil AI plan'
+      : 'Start your monthly Bheppo Stencil AI plan';
 
   String get checkoutSummary => isYearly
       ? 'Then \$99.00/year after your 3-day free trial.'

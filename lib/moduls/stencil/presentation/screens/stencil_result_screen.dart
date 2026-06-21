@@ -57,10 +57,7 @@ class StencilResultScreen extends StatelessWidget {
             children: [
               const Text(
                 'Preview and save your creation',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: AppPalette.textSecondary,
-                ),
+                style: TextStyle(fontSize: 12, color: AppPalette.textSecondary),
               ),
               const SizedBox(height: 14),
               if (hasOverlay) ...[
@@ -221,12 +218,13 @@ class _OverlayResultView extends StatelessWidget {
   });
 
   static const _overlayColors = [
-    Color(0xFFCC0000),
     Color(0xFF000000),
+    Color(0xFFCC0000),
     Color(0xFF1A6B8A),
+    Color(0xFF1B7F3A),
   ];
 
-  static const _overlayLabels = ['Red', 'Black', 'Blue'];
+  static const _overlayLabels = ['Black', 'Red', 'Blue', 'Green'];
 
   @override
   Widget build(BuildContext context) {
@@ -276,31 +274,55 @@ class _OverlayResultView extends StatelessWidget {
           );
         }),
         const SizedBox(height: 14),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                children: [
-                  const Text(
-                    'Stencil',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: AppPalette.textSecondary,
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final stencilCard = _ResultImageCard(
+              title: 'Stencil',
+              child: AppCachedImage(
+                imageUrl: stencilImageUrl,
+                width: double.infinity,
+                height: double.infinity,
+                fit: BoxFit.contain,
+                onTap: () {},
+              ),
+            );
+            final overlayCard = _ResultImageCard(
+              title: 'Overlay Preview',
+              child: Obx(() {
+                final selectedIndex =
+                    selectedColorIndex.value.clamp(0, _overlayColors.length - 1)
+                        as int;
+                final tint = _overlayColors[selectedIndex];
+                final canUseGeneratedRedOverlay =
+                    selectedIndex == 1 && overlayImageUrl.isNotEmpty;
+
+                if (canUseGeneratedRedOverlay) {
+                  return AppCachedImage(
+                    imageUrl: overlayImageUrl,
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.contain,
+                    onTap: () {},
+                  );
+                }
+
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    AppCachedImage(
+                      imageUrl: originalImageUrl,
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.contain,
+                      onTap: () {},
                     ),
-                  ),
-                  const SizedBox(height: 6),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: AppPalette.cardBorder),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: AspectRatio(
-                        aspectRatio: 0.75,
+                    ColorFiltered(
+                      colorFilter: ColorFilter.mode(
+                        tint.withValues(alpha: 0.75),
+                        BlendMode.srcIn,
+                      ),
+                      child: Opacity(
+                        opacity: 0.72,
                         child: AppCachedImage(
                           imageUrl: stencilImageUrl,
                           width: double.infinity,
@@ -310,93 +332,67 @@ class _OverlayResultView extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
+                  ],
+                );
+              }),
+            );
+
+            if (constraints.maxWidth < 520) {
+              return Column(
                 children: [
-                  const Text(
-                    'Overlay Preview',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: AppPalette.textSecondary,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: AppPalette.cardBorder),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: AspectRatio(
-                        aspectRatio: 0.75,
-                        child: Obx(() {
-                          final tint = _overlayColors[
-                              selectedColorIndex.value.clamp(
-                                0,
-                                _overlayColors.length - 1,
-                              )];
-                          return Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              AppCachedImage(
-                                imageUrl: originalImageUrl,
-                                width: double.infinity,
-                                height: double.infinity,
-                                fit: BoxFit.cover,
-                                onTap: () {},
-                              ),
-                              ColorFiltered(
-                                colorFilter: ColorFilter.mode(
-                                  tint.withValues(alpha: 0.0),
-                                  BlendMode.color,
-                                ),
-                                child: Opacity(
-                                  opacity: 0.72,
-                                  child: AppCachedImage(
-                                    imageUrl: stencilImageUrl,
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    fit: BoxFit.cover,
-                                    onTap: () {},
-                                  ),
-                                ),
-                              ),
-                              ColorFiltered(
-                                colorFilter: ColorFilter.mode(
-                                  tint.withValues(alpha: 0.45),
-                                  BlendMode.srcIn,
-                                ),
-                                child: Opacity(
-                                  opacity: 0.55,
-                                  child: AppCachedImage(
-                                    imageUrl: stencilImageUrl,
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    fit: BoxFit.cover,
-                                    onTap: () {},
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        }),
-                      ),
-                    ),
-                  ),
+                  stencilCard,
+                  const SizedBox(height: 12),
+                  overlayCard,
                 ],
-              ),
-            ),
-          ],
+              );
+            }
+
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: stencilCard),
+                const SizedBox(width: 10),
+                Expanded(child: overlayCard),
+              ],
+            );
+          },
         ),
       ],
     );
   }
 }
 
+class _ResultImageCard extends StatelessWidget {
+  final String title;
+  final Widget child;
+
+  const _ResultImageCard({required this.title, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+            color: AppPalette.textSecondary,
+          ),
+        ),
+        const SizedBox(height: 6),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: AppPalette.cardBorder),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: AspectRatio(aspectRatio: 0.75, child: child),
+          ),
+        ),
+      ],
+    );
+  }
+}

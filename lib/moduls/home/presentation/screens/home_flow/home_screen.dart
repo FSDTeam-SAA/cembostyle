@@ -40,8 +40,8 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 24,
-                      backgroundImage: profile != null &&
-                              profile.profileImageUrl.isNotEmpty
+                      backgroundImage:
+                          profile != null && profile.profileImageUrl.isNotEmpty
                           ? NetworkImage(profile.profileImageUrl)
                           : null,
                       backgroundColor: AppPalette.purpleSoft,
@@ -72,7 +72,7 @@ class HomeScreen extends StatelessWidget {
                           Text(
                             profile?.name.isNotEmpty == true
                                 ? profile!.name
-                                : 'Cembostyle Artist',
+                                : 'Bheppo Artist',
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w800,
@@ -163,7 +163,8 @@ class HomeScreen extends StatelessWidget {
                 }
 
                 final items = controller.recentActivities;
-                final hasError = controller.recentActivityError.value.isNotEmpty;
+                final hasError =
+                    controller.recentActivityError.value.isNotEmpty;
 
                 if (items.isEmpty) {
                   return Center(
@@ -271,7 +272,7 @@ class HomeScreen extends StatelessWidget {
                 number: '2',
                 title: 'Choose a Style',
                 description:
-                    'Outline: clean black lines on white background.\nRealism: detailed red-line tracing with tonal guides.\nPrintHatch: cross-hatch engraving style for printer stencils.\nOverlay Realism: realism stencil shown side-by-side with original.',
+                    'Outline: clean black lines on white background.\nRealism: detailed red-line tracing with clean stencil and overlay preview.\nPrintHatch: cross-hatch engraving style for printer stencils.',
               ),
               _GuideStep(
                 number: '3',

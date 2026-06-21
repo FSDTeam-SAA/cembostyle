@@ -110,8 +110,9 @@ class HomeDummyData {
   ];
 
   static const List<ColorThemeOption> colorThemes = [
-    ColorThemeOption(id: 'black', title: 'Tattoo Black & Grey'),
-    ColorThemeOption(id: 'red_black', title: 'Red & Black Contrast'),
-    ColorThemeOption(id: 'cobalt', title: 'Stencil Cobalt Blue'),
+    ColorThemeOption(id: 'black', title: 'Black'),
+    ColorThemeOption(id: 'red', title: 'Red'),
+    ColorThemeOption(id: 'blue', title: 'Blue'),
+    ColorThemeOption(id: 'green', title: 'Green'),
   ];
 }

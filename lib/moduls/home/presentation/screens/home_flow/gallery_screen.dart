@@ -25,7 +25,7 @@ class GalleryScreen extends StatelessWidget {
         leadingWidth: BackButton().iconSize,
 
         title: const Text(
-          'Try the Gallery for free',
+          'Stencil Gallery',
           style: TextStyle(
             color: AppPalette.textPrimary,
             fontSize: 18,
