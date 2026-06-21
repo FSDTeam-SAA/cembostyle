@@ -47,8 +47,8 @@ class StencilResultScreen extends StatelessWidget {
               ? record!.stencilImageUrl
               : controller.samples.first.resultUrl;
           final hasFailed = record?.status == 'FAILED';
-          final hasOverlay = record?.hasOverlay == true;
-          final baseStencil = record?.baseStencilImageUrl.isNotEmpty == true
+          final isRealism = record?.style == 'Realism';
+          final stencilForOverlay = record?.baseStencilImageUrl.isNotEmpty == true
               ? record!.baseStencilImageUrl
               : resultImage;
 
@@ -63,13 +63,11 @@ class StencilResultScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 14),
-              if (hasOverlay) ...[
+              if (isRealism) ...[
                 _OverlayResultView(
-                  stencilImageUrl: baseStencil,
-                  overlayImageUrl: resultImage,
+                  stencilImageUrl: stencilForOverlay,
                   originalImageUrl: image,
                   selectedColorIndex: controller.selectedColorThemeIndex,
-                  colorThemes: controller.colorThemes,
                 ),
               ] else ...[
                 Container(
@@ -207,26 +205,23 @@ class StencilResultScreen extends StatelessWidget {
 
 class _OverlayResultView extends StatelessWidget {
   final String stencilImageUrl;
-  final String overlayImageUrl;
   final String originalImageUrl;
   final RxInt selectedColorIndex;
-  final List<dynamic> colorThemes;
 
   const _OverlayResultView({
     required this.stencilImageUrl,
-    required this.overlayImageUrl,
     required this.originalImageUrl,
     required this.selectedColorIndex,
-    required this.colorThemes,
   });
 
   static const _overlayColors = [
-    Color(0xFFCC0000),
     Color(0xFF000000),
+    Color(0xFFCC0000),
     Color(0xFF1A6B8A),
+    Color(0xFF1B7F3A),
   ];
 
-  static const _overlayLabels = ['Red', 'Black', 'Blue'];
+  static const _overlayLabels = ['Black', 'Red', 'Blue', 'Green'];
 
   @override
   Widget build(BuildContext context) {

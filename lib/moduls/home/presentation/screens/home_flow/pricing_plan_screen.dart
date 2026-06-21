@@ -203,7 +203,7 @@ class PricingPlanScreen extends StatelessWidget {
                 title: 'Refund Policy',
                 highlight: true,
                 lines: [
-                  'Refunds are processed by Cembostyle through Stripe',
+                  'Refunds are processed by BHEPPO LLC through Stripe',
                   'Cancel during the trial period - no charges applied',
                   'Contact support for refund requests',
                 ],
@@ -213,7 +213,7 @@ class PricingPlanScreen extends StatelessWidget {
                 title: 'Secure Payment',
                 lines: [
                   'Payments are processed securely through Stripe, Inc.',
-                  'Cembostyle does not store full card information.',
+                  'BHEPPO LLC does not store full card information.',
                 ],
                 footer: 'Secure Payments',
               ),
@@ -226,7 +226,7 @@ class PricingPlanScreen extends StatelessWidget {
               const SizedBox(height: 6),
               const Center(
                 child: Text(
-                  'Cembostyle © 2026',
+                  'BHEPPO LLC © 2026',
                   style: TextStyle(
                     fontSize: 10,
                     color: AppPalette.textSecondary,

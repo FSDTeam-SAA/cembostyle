@@ -271,7 +271,7 @@ class HomeScreen extends StatelessWidget {
                 number: '2',
                 title: 'Choose a Style',
                 description:
-                    'Outline: clean black lines on white background.\nRealism: detailed red-line tracing with tonal guides.\nPrintHatch: cross-hatch engraving style for printer stencils.\nOverlay Realism: realism stencil shown side-by-side with original.',
+                    'Outline: clean black lines on white background.\nRealism: detailed red-line stencil with overlay preview.\nPrintHatch: cross-hatch engraving style for printer stencils.',
               ),
               _GuideStep(
                 number: '3',
