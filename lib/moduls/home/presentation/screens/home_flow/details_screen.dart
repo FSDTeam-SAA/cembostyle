@@ -3,8 +3,6 @@ import 'package:get/get.dart';
 
 import 'package:cembostyle/core/common/widgets/app_scaffold.dart';
 import 'package:cembostyle/core/common/widgets/app_ui/before_after_slider.dart';
-import 'package:cembostyle/core/common/widgets/app_ui/detail_level_slider.dart';
-import 'package:cembostyle/core/common/widgets/app_ui/styled_dropdown.dart';
 import 'package:cembostyle/core/theme/app_palette.dart';
 import 'package:cembostyle/moduls/home/controllers/home_controller.dart';
 import 'package:cembostyle/moduls/home/models/home_models.dart';
@@ -61,54 +59,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Obx(() {
-                return DetailLevelSlider(
-                  value: _controller.selectedDetailLevel.value,
-                  onChanged: (value) {
-                    _controller.selectedDetailLevel.value = value;
-                    _controller.generateGalleryPreview(
-                      item: _item,
-                      forceRefresh: true,
-                    );
-                  },
-                );
-              }),
-              const SizedBox(height: 16),
               const Text(
-                'Select color theme',
+                'Preview',
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
               ),
-              const SizedBox(height: 8),
-              Obx(() {
-                final selected =
-                    _controller.colorThemes[_controller.selectedColorThemeIndex.value];
-                return StyledDropdown<ColorThemeOption>(
-                  value: selected,
-                  items: _controller.colorThemes
-                      .map(
-                        (theme) => DropdownMenuItem<ColorThemeOption>(
-                          value: theme,
-                          child: Text(
-                            theme.title,
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: (newValue) {
-                    if (newValue == null) {
-                      return;
-                    }
-
-                    final index = _controller.colorThemes.indexOf(newValue);
-                    _controller.selectedColorThemeIndex.value = index;
-                    _controller.generateGalleryPreview(
-                      item: _item,
-                      forceRefresh: true,
-                    );
-                  },
-                );
-              }),
               const SizedBox(height: 12),
               Expanded(
                 child: Center(
@@ -121,8 +75,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           : _item.imageUrl;
                       final resultImage =
                           preview?.previewImageUrl.isNotEmpty == true
-                              ? preview!.previewImageUrl
-                              : image;
+                          ? preview!.previewImageUrl
+                          : image;
 
                       return Stack(
                         children: [

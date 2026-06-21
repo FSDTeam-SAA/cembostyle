@@ -24,7 +24,7 @@ class StencilController extends GetxController {
   bool _hasLoadedLibrary = false;
 
   final RxInt selectedStyleIndex = 0.obs;
-  final RxInt selectedColorThemeIndex = 0.obs;
+  final RxInt selectedColorThemeIndex = 1.obs;
   final RxInt selectedDetailLevel = 1.obs;
   final RxDouble compareValue = 0.55.obs;
   final RxDouble brightness = 0.8.obs;
@@ -45,7 +45,8 @@ class StencilController extends GetxController {
   List<ColorThemeOption> get colorThemes => StencilDummyData.colorThemes;
   List<StencilSampleImage> get samples => StencilDummyData.samples;
 
-  StencilStyleOption get selectedStyle => stencilStyles[selectedStyleIndex.value];
+  StencilStyleOption get selectedStyle =>
+      stencilStyles[selectedStyleIndex.value];
   ColorThemeOption get selectedColorTheme =>
       colorThemes[selectedColorThemeIndex.value];
 
@@ -183,9 +184,7 @@ class StencilController extends GetxController {
     }
 
     await SharePlus.instance.share(
-      ShareParams(
-        text: 'My Cembostyle stencil: $url',
-      ),
+      ShareParams(text: 'My Bheppo Stencil AI stencil: $url'),
     );
   }
 
@@ -257,7 +256,10 @@ class StencilController extends GetxController {
     final record = activeStencil.value;
     final url = record?.stencilImageUrl ?? '';
     if (url.isEmpty) {
-      Get.snackbar('Download', 'There is no generated stencil to download yet.');
+      Get.snackbar(
+        'Download',
+        'There is no generated stencil to download yet.',
+      );
       return;
     }
 
@@ -291,7 +293,7 @@ class StencilController extends GetxController {
               crossAxisAlignment: pw.CrossAxisAlignment.stretch,
               children: [
                 pw.Text(
-                  'Cembostyle Stencil',
+                  'Bheppo Stencil AI',
                   style: pw.TextStyle(
                     fontSize: 18,
                     fontWeight: pw.FontWeight.bold,
@@ -299,7 +301,7 @@ class StencilController extends GetxController {
                 ),
                 pw.SizedBox(height: 6),
                 pw.Text(
-                  '$styleLabel • $themeLabel',
+                  '$styleLabel - $themeLabel',
                   style: const pw.TextStyle(fontSize: 11),
                 ),
                 pw.SizedBox(height: 18),
@@ -309,12 +311,12 @@ class StencilController extends GetxController {
                       width: PdfPageFormat.a4.availableWidth,
                       padding: const pw.EdgeInsets.all(16),
                       decoration: pw.BoxDecoration(
-                        border: pw.Border.all(color: PdfColors.grey400, width: 1),
+                        border: pw.Border.all(
+                          color: PdfColors.grey400,
+                          width: 1,
+                        ),
                       ),
-                      child: pw.Image(
-                        image,
-                        fit: pw.BoxFit.contain,
-                      ),
+                      child: pw.Image(image, fit: pw.BoxFit.contain),
                     ),
                   ),
                 ),
@@ -327,7 +329,7 @@ class StencilController extends GetxController {
       final directory = await _resolvePdfDirectory();
       await directory.create(recursive: true);
       final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final file = File('${directory.path}/cembostyle_stencil_$timestamp.pdf');
+      final file = File('${directory.path}/bheppo_stencil_ai_$timestamp.pdf');
       await file.writeAsBytes(await pdf.save(), flush: true);
 
       Get.snackbar(
@@ -387,17 +389,17 @@ class StencilController extends GetxController {
         type: StorageDirectory.downloads,
       );
       if (downloadDirectories != null && downloadDirectories.isNotEmpty) {
-        return Directory('${downloadDirectories.first.path}/Cembostyle');
+        return Directory('${downloadDirectories.first.path}/BheppoStencilAI');
       }
 
       final directory = await getExternalStorageDirectory();
       if (directory != null) {
-        return Directory('${directory.path}/Cembostyle');
+        return Directory('${directory.path}/BheppoStencilAI');
       }
     }
 
     final directory = await getApplicationDocumentsDirectory();
-    return Directory('${directory.path}/Cembostyle');
+    return Directory('${directory.path}/BheppoStencilAI');
   }
 
   Future<Uint8List?> _downloadBytes(String url) async {
@@ -491,7 +493,7 @@ class StencilController extends GetxController {
     if (statusLabel.isEmpty) {
       return style;
     }
-    return '$style • $statusLabel';
+    return '$style - $statusLabel';
   }
 
   String _formatDate(String value) {

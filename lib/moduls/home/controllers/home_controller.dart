@@ -22,7 +22,7 @@ class HomeController extends GetxController {
   final RxInt bottomNavIndex = 0.obs;
   final RxInt selectedCategoryIndex = 0.obs;
   final RxInt selectedPlanIndex = 0.obs;
-  final RxInt selectedColorThemeIndex = 0.obs;
+  final RxInt selectedColorThemeIndex = 1.obs;
   final RxInt selectedDetailLevel = 1.obs;
   final RxDouble compareValue = 0.55.obs;
   final RxBool hasActivePlan = false.obs;
@@ -57,7 +57,9 @@ class HomeController extends GetxController {
     await Future.wait([
       fetchUserProfile(),
       fetchGalleryByCategory(
-        categories.isNotEmpty ? categories[selectedCategoryIndex.value].title : '',
+        categories.isNotEmpty
+            ? categories[selectedCategoryIndex.value].title
+            : '',
       ),
       fetchRecentActivities(),
     ]);
@@ -146,20 +148,16 @@ class HomeController extends GetxController {
                 profileImagePath,
                 filename: profileImagePath.split('/').last,
               ),
-              'data': jsonEncode({
-                'name': trimmedName,
-                'email': trimmedEmail,
-              }),
+              'data': jsonEncode({'name': trimmedName, 'email': trimmedEmail}),
             }),
-            fromJsonT: (json) => UserProfile.fromApi(json as Map<String, dynamic>),
+            fromJsonT: (json) =>
+                UserProfile.fromApi(json as Map<String, dynamic>),
           )
         : await _apiClient.patch<UserProfile>(
             endpoint: ApiConstants.account.updateProfile,
-            data: {
-              'name': trimmedName,
-              'email': trimmedEmail,
-            },
-            fromJsonT: (json) => UserProfile.fromApi(json as Map<String, dynamic>),
+            data: {'name': trimmedName, 'email': trimmedEmail},
+            fromJsonT: (json) =>
+                UserProfile.fromApi(json as Map<String, dynamic>),
           );
 
     isProfileSaving.value = false;
@@ -414,7 +412,7 @@ class HomeController extends GetxController {
     if (statusLabel.isEmpty) {
       return style;
     }
-    return '$style • $statusLabel';
+    return '$style - $statusLabel';
   }
 
   String _formatDate(String value) {

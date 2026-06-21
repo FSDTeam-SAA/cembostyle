@@ -43,23 +43,41 @@ class BeforeAfterSlider extends StatelessWidget {
           },
           child: Stack(
             children: [
-              AppCachedImage(
-                imageUrl: afterImage,
+              Container(
                 width: width,
                 height: height,
-                borderRadius: BorderRadius.circular(radius),
-                onTap: () {},
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(radius),
+                ),
+                child: AppCachedImage(
+                  imageUrl: afterImage,
+                  width: width,
+                  height: height,
+                  fit: BoxFit.contain,
+                  borderRadius: BorderRadius.circular(radius),
+                  onTap: () {},
+                ),
               ),
               ClipRect(
                 child: Align(
                   alignment: Alignment.centerLeft,
                   widthFactor: value,
-                  child: AppCachedImage(
-                    imageUrl: beforeImage,
+                  child: Container(
                     width: width,
                     height: height,
-                    borderRadius: BorderRadius.circular(radius),
-                    onTap: () {},
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(radius),
+                    ),
+                    child: AppCachedImage(
+                      imageUrl: beforeImage,
+                      width: width,
+                      height: height,
+                      fit: BoxFit.contain,
+                      borderRadius: BorderRadius.circular(radius),
+                      onTap: () {},
+                    ),
                   ),
                 ),
               ),

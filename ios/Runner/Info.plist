@@ -26,6 +26,10 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Bheppo Stencil AI needs camera access so you can capture photos for stencil generation.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Bheppo Stencil AI needs photo library access so you can upload images for stencil generation.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

@@ -33,16 +33,23 @@ class UploadCard extends StatelessWidget {
               color: const Color(0xFFF8F6FF),
               child: Column(
                 children: const [
-                  Icon(Icons.ios_share, color: AppPalette.textPrimary, size: 26),
+                  Icon(
+                    Icons.ios_share,
+                    color: AppPalette.textPrimary,
+                    size: 26,
+                  ),
                   SizedBox(height: 8),
                   Text(
-                    'Upload Your own Image',
+                    'Upload Your Own Image',
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   SizedBox(height: 4),
                   Text(
                     'Tap to select from gallery',
-                    style: TextStyle(fontSize: 12, color: AppPalette.textSecondary),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppPalette.textSecondary,
+                    ),
                   ),
                 ],
               ),

@@ -48,8 +48,8 @@ class ProfileScreen extends StatelessWidget {
                     CircleAvatar(
                       radius: 18,
                       backgroundColor: AppPalette.purpleSoft,
-                      backgroundImage: profile != null &&
-                              profile.profileImageUrl.isNotEmpty
+                      backgroundImage:
+                          profile != null && profile.profileImageUrl.isNotEmpty
                           ? NetworkImage(profile.profileImageUrl)
                           : null,
                       child: profile == null || profile.profileImageUrl.isEmpty
@@ -71,7 +71,7 @@ class ProfileScreen extends StatelessWidget {
                           Text(
                             profile?.name.isNotEmpty == true
                                 ? profile!.name
-                                : 'Cembostyle User',
+                                : 'Bheppo User',
                             style: const TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w700,
@@ -151,19 +151,13 @@ Future<void> _showLogoutDialog(AuthController authController) async {
     Dialog(
       backgroundColor: Colors.white,
       insetPadding: const EdgeInsets.symmetric(horizontal: 32),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(26),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 18),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset(
-              AppImages.logOut,
-              height: 120,
-              fit: BoxFit.contain,
-            ),
+            Image.asset(AppImages.logOut, height: 120, fit: BoxFit.contain),
             const SizedBox(height: 12),
             const Text(
               'Are you sure?',
