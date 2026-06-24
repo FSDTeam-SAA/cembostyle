@@ -10,6 +10,7 @@ import 'package:cembostyle/core/theme/app_palette.dart';
 import 'package:cembostyle/moduls/home/controllers/home_controller.dart';
 import 'package:cembostyle/moduls/home/presentation/routes/home_routes.dart';
 import 'package:cembostyle/moduls/stencil/controllers/stencil_controller.dart';
+import 'package:cembostyle/moduls/stencil/models/stencil_models.dart';
 import 'package:cembostyle/moduls/stencil/presentation/routes/stencil_routes.dart';
 
 class StencilScreen extends StatelessWidget {
@@ -159,7 +160,29 @@ class StencilScreen extends StatelessWidget {
                       ),
                     ...limitedItems.map(
                       (item) => GestureDetector(
-                        onTap: () => Get.toNamed(HomeRoutes.myStencils),
+                        onTap: () {
+                          final controller = Get.find<StencilController>();
+                          controller.applyStencilRecord(
+                            StencilRecord(
+                              id: item.id,
+                              style: item.styleName,
+                              colorTheme: item.colorTheme,
+                              detailLevel: item.detailLevel,
+                              brightness: 0.8,
+                              contrast: 0.6,
+                              status: item.status,
+                              createdAt: item.date,
+                              updatedAt: item.date,
+                              originalImageUrl: item.originalImageUrl,
+                              stencilImageUrl: item.stencilImageUrl,
+                              baseStencilImageUrl: item.baseStencilImageUrl,
+                              errorCode: '',
+                              errorMessage: item.errorMessage,
+                              isSaved: item.isSaved,
+                            ),
+                          );
+                          Get.toNamed(StencilRoutes.stencilResult);
+                        },
                         child: RecentActivityTile(
                           title: item.title,
                           style: item.style,

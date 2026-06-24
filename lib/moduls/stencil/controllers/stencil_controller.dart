@@ -1,7 +1,8 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:dio/dio.dart' as dio;
+import 'package:flutter/foundation.dart';
+import 'package:gal/gal.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -9,10 +10,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import 'package:cembostyle/core/network/api_client.dart';
 import 'package:cembostyle/core/network/constants/api_constants.dart';
+import 'package:cembostyle/moduls/home/controllers/home_controller.dart';
 import '../data/stencil_dummy_data.dart';
 import '../models/stencil_models.dart';
 
@@ -32,7 +32,7 @@ class StencilController extends GetxController {
   final RxBool isRecentActivityLoading = false.obs;
   final RxBool isGenerating = false.obs;
   final RxBool isSavingToGallery = false.obs;
-  final RxBool isDownloadingPdf = false.obs;
+  final RxBool isDownloading = false.obs;
   final RxString recentActivityError = ''.obs;
   final RxString generationError = ''.obs;
 
@@ -96,6 +96,13 @@ class StencilController extends GetxController {
     await fetchRecentActivities();
   }
 
+  void _refreshHomeActivities() {
+    try {
+      final homeCtrl = Get.find<HomeController>();
+      homeCtrl.refreshRecentActivities();
+    } catch (_) {}
+  }
+
   Future<void> fetchRecentActivities() async {
     recentActivityError.value = '';
     isRecentActivityLoading.value = true;
@@ -153,6 +160,10 @@ class StencilController extends GetxController {
       endpoint: ApiConstants.stencil.create,
       formData: formData,
       fromJsonT: (json) => StencilRecord.fromApi(json as Map<String, dynamic>),
+      options: dio.Options(
+        sendTimeout: const Duration(minutes: 3),
+        receiveTimeout: const Duration(minutes: 5),
+      ),
     );
 
     isGenerating.value = false;
@@ -174,37 +185,136 @@ class StencilController extends GetxController {
     );
   }
 
-  Future<void> shareActiveStencil() async {
+  List<String> get _stencilDownloadUrls {
     final record = activeStencil.value;
-    final url = record?.stencilImageUrl ?? '';
-    if (url.isEmpty) {
+    final base = record?.baseStencilImageUrl ?? '';
+    final stencil = record?.stencilImageUrl ?? '';
+    final urls = <String>[];
+    if (base.isNotEmpty) urls.add(base);
+    if (stencil.isNotEmpty && stencil != base) urls.add(stencil);
+    return urls;
+  }
+
+  Future<Uint8List?> _downloadStencilBytes() async {
+    for (final url in _stencilDownloadUrls) {
+      final bytes = await _downloadBytes(url);
+      if (bytes != null && bytes.isNotEmpty) return bytes;
+    }
+    return null;
+  }
+
+  Future<void> shareActiveStencil() async {
+    if (_stencilDownloadUrls.isEmpty) {
       Get.snackbar('Share', 'There is no generated stencil to share yet.');
       return;
     }
 
-    await SharePlus.instance.share(
-      ShareParams(
-        text: 'My Cembostyle stencil: $url',
-      ),
-    );
+    try {
+      final bytes = await _downloadStencilBytes();
+      if (bytes == null) {
+        Get.snackbar('Share', 'Could not load the stencil image.');
+        return;
+      }
+
+      final dir = await getTemporaryDirectory();
+      final url = _stencilDownloadUrls.first;
+      final ext = url.toLowerCase().contains('.png') ? 'png' : 'jpg';
+      final file = File('${dir.path}/bheppo_stencil.$ext');
+      await file.writeAsBytes(bytes, flush: true);
+
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(file.path)],
+          text: 'My Bheppo stencil',
+        ),
+      );
+    } catch (error) {
+      Get.snackbar('Share', 'Could not share the stencil. $error');
+    }
   }
 
-  Future<void> openActiveStencilExternally() async {
-    final record = activeStencil.value;
-    final url = record?.stencilImageUrl ?? '';
-    if (url.isEmpty) {
-      Get.snackbar('Download', 'There is no generated stencil to open yet.');
+  Future<void> downloadStencil(String format) async {
+    if (_stencilDownloadUrls.isEmpty) {
+      Get.snackbar('Download', 'There is no generated stencil to download yet.');
       return;
     }
 
-    final launched = await launchUrl(
-      Uri.parse(url),
-      mode: LaunchMode.externalApplication,
+    if (isDownloading.value) return;
+    isDownloading.value = true;
+
+    try {
+      final imageBytes = await _downloadStencilBytes();
+      if (imageBytes == null) {
+        throw Exception('Could not download the stencil image.');
+      }
+
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+
+      if (format == 'pdf') {
+        final directory = await _resolveDownloadDirectory();
+        await directory.create(recursive: true);
+        await _saveAsPdf(imageBytes, directory, timestamp);
+        Get.snackbar(
+          'Download complete',
+          'PDF saved to Downloads.',
+          snackPosition: SnackPosition.BOTTOM,
+          duration: const Duration(seconds: 3),
+        );
+      } else {
+        final ext = format == 'png' ? 'png' : 'jpg';
+        final tempDir = await getTemporaryDirectory();
+        final tempFile = File('${tempDir.path}/bheppo_stencil_$timestamp.$ext');
+        await tempFile.writeAsBytes(imageBytes, flush: true);
+        await Gal.putImage(tempFile.path, album: 'Bheppo Stencil');
+        Get.snackbar(
+          'Saved to Photos',
+          '${ext.toUpperCase()} saved to your photo gallery.',
+          snackPosition: SnackPosition.BOTTOM,
+          duration: const Duration(seconds: 3),
+        );
+      }
+    } catch (error) {
+      if (error is GalException) {
+        Get.snackbar(
+          'Permission needed',
+          'Please allow photo library access to save images.',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      } else {
+        Get.snackbar('Download', 'Could not save the stencil. $error');
+      }
+    } finally {
+      isDownloading.value = false;
+    }
+  }
+
+  Future<File> _saveAsPdf(
+    Uint8List imageBytes,
+    Directory directory,
+    int timestamp,
+  ) async {
+    final pdf = pw.Document();
+    final image = pw.MemoryImage(imageBytes);
+
+    pdf.addPage(
+      pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        margin: const pw.EdgeInsets.all(24),
+        build: (context) {
+          return pw.Center(
+            child: pw.Image(
+              image,
+              fit: pw.BoxFit.contain,
+              width: PdfPageFormat.a4.availableWidth,
+            ),
+          );
+        },
+      ),
     );
 
-    if (!launched) {
-      Get.snackbar('Download', 'Could not open the stencil image.');
-    }
+    final file = File('${directory.path}/bheppo_stencil_$timestamp.pdf');
+    await file.writeAsBytes(await pdf.save(), flush: true);
+    return file;
   }
 
   Future<void> markAsSaved() async {
@@ -244,6 +354,7 @@ class StencilController extends GetxController {
       (success) async {
         activeStencil.value = success.data;
         await fetchRecentActivities();
+        _refreshHomeActivities();
         Get.snackbar(
           'Saved to My Stencils',
           'Your stencil has been added to My Stencils.',
@@ -253,95 +364,6 @@ class StencilController extends GetxController {
     );
   }
 
-  Future<void> downloadActiveStencilAsPdf() async {
-    final record = activeStencil.value;
-    final url = record?.stencilImageUrl ?? '';
-    if (url.isEmpty) {
-      Get.snackbar('Download', 'There is no generated stencil to download yet.');
-      return;
-    }
-
-    if (isDownloadingPdf.value) {
-      return;
-    }
-
-    isDownloadingPdf.value = true;
-
-    try {
-      final imageBytes = await _downloadBytes(url);
-      if (imageBytes == null || imageBytes.isEmpty) {
-        throw Exception('Could not download the stencil image.');
-      }
-
-      final pdf = pw.Document();
-      final image = pw.MemoryImage(imageBytes);
-      final styleLabel = record?.style.isNotEmpty == true
-          ? record!.style
-          : 'Tattoo Stencil';
-      final themeLabel = record?.colorTheme.isNotEmpty == true
-          ? record!.colorTheme
-          : 'Printable reference';
-
-      pdf.addPage(
-        pw.Page(
-          pageFormat: PdfPageFormat.a4,
-          margin: const pw.EdgeInsets.all(28),
-          build: (context) {
-            return pw.Column(
-              crossAxisAlignment: pw.CrossAxisAlignment.stretch,
-              children: [
-                pw.Text(
-                  'Cembostyle Stencil',
-                  style: pw.TextStyle(
-                    fontSize: 18,
-                    fontWeight: pw.FontWeight.bold,
-                  ),
-                ),
-                pw.SizedBox(height: 6),
-                pw.Text(
-                  '$styleLabel • $themeLabel',
-                  style: const pw.TextStyle(fontSize: 11),
-                ),
-                pw.SizedBox(height: 18),
-                pw.Expanded(
-                  child: pw.Center(
-                    child: pw.Container(
-                      width: PdfPageFormat.a4.availableWidth,
-                      padding: const pw.EdgeInsets.all(16),
-                      decoration: pw.BoxDecoration(
-                        border: pw.Border.all(color: PdfColors.grey400, width: 1),
-                      ),
-                      child: pw.Image(
-                        image,
-                        fit: pw.BoxFit.contain,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-      );
-
-      final directory = await _resolvePdfDirectory();
-      await directory.create(recursive: true);
-      final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final file = File('${directory.path}/cembostyle_stencil_$timestamp.pdf');
-      await file.writeAsBytes(await pdf.save(), flush: true);
-
-      Get.snackbar(
-        'Download complete',
-        'Printable A4 PDF saved to ${file.path}',
-        snackPosition: SnackPosition.BOTTOM,
-        duration: const Duration(seconds: 4),
-      );
-    } catch (error) {
-      Get.snackbar('Download', 'Could not create the PDF. $error');
-    } finally {
-      isDownloadingPdf.value = false;
-    }
-  }
 
   Future<dio.MultipartFile?> _createSourceFile() async {
     final localFile = selectedImageFile.value;
@@ -381,37 +403,35 @@ class StencilController extends GetxController {
     }
   }
 
-  Future<Directory> _resolvePdfDirectory() async {
+  Future<Directory> _resolveDownloadDirectory() async {
     if (Platform.isAndroid) {
-      final downloadDirectories = await getExternalStorageDirectories(
-        type: StorageDirectory.downloads,
-      );
-      if (downloadDirectories != null && downloadDirectories.isNotEmpty) {
-        return Directory('${downloadDirectories.first.path}/Cembostyle');
-      }
-
-      final directory = await getExternalStorageDirectory();
-      if (directory != null) {
-        return Directory('${directory.path}/Cembostyle');
+      final publicDownloads = Directory('/storage/emulated/0/Download');
+      if (await publicDownloads.exists()) {
+        return publicDownloads;
       }
     }
 
     final directory = await getApplicationDocumentsDirectory();
-    return Directory('${directory.path}/Cembostyle');
+    return directory;
   }
 
   Future<Uint8List?> _downloadBytes(String url) async {
     try {
       final response = await dio.Dio().get<List<int>>(
         url,
-        options: dio.Options(responseType: dio.ResponseType.bytes),
+        options: dio.Options(
+          responseType: dio.ResponseType.bytes,
+          receiveTimeout: const Duration(seconds: 60),
+          followRedirects: true,
+        ),
       );
       final bytes = response.data;
       if (bytes == null || bytes.isEmpty) {
         return null;
       }
       return Uint8List.fromList(bytes);
-    } catch (_) {
+    } catch (e) {
+      if (kDebugMode) print('Download failed for $url: $e');
       return null;
     }
   }

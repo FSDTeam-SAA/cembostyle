@@ -145,7 +145,7 @@ class StencilResultScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: HomeOutlineButton(
-                      text: controller.isDownloadingPdf.value
+                      text: controller.isDownloading.value
                           ? 'Downloading...'
                           : 'Download',
                       icon: const Icon(Icons.download_rounded, size: 18),
@@ -154,9 +154,9 @@ class StencilResultScreen extends StatelessWidget {
                       fillColor: Colors.white,
                       radius: 26,
                       height: 46,
-                      onTap: controller.isDownloadingPdf.value
+                      onTap: controller.isDownloading.value
                           ? null
-                          : controller.downloadActiveStencilAsPdf,
+                          : () => _showDownloadSheet(context, controller),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -198,6 +198,133 @@ class StencilResultScreen extends StatelessWidget {
             ],
           );
         }),
+      ),
+    );
+  }
+
+  void _showDownloadSheet(BuildContext context, StencilController controller) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Download Stencil',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: AppPalette.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'Choose a format',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: AppPalette.textSecondary,
+                ),
+              ),
+              const SizedBox(height: 16),
+              _DownloadOption(
+                icon: Icons.image_outlined,
+                title: 'JPG Image',
+                subtitle: 'Compressed image format',
+                onTap: () {
+                  Navigator.pop(context);
+                  controller.downloadStencil('jpg');
+                },
+              ),
+              _DownloadOption(
+                icon: Icons.image_outlined,
+                title: 'PNG Image',
+                subtitle: 'Lossless image with transparency',
+                onTap: () {
+                  Navigator.pop(context);
+                  controller.downloadStencil('png');
+                },
+              ),
+              _DownloadOption(
+                icon: Icons.picture_as_pdf_outlined,
+                title: 'PDF Document',
+                subtitle: 'A4 size, ready to print',
+                onTap: () {
+                  Navigator.pop(context);
+                  controller.downloadStencil('pdf');
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DownloadOption extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  const _DownloadOption({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppPalette.purpleSoft,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(icon, size: 20, color: AppPalette.purple),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppPalette.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: AppPalette.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right, size: 20, color: AppPalette.textSecondary),
+          ],
+        ),
       ),
     );
   }

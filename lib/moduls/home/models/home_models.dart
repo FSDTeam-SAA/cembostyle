@@ -55,6 +55,15 @@ class ActivityItem {
   final String thumbnailUrl;
   final String originalImageUrl;
   final String stencilImageUrl;
+  final String baseStencilImageUrl;
+  final String styleName;
+  final String colorTheme;
+  final int detailLevel;
+  final double brightness;
+  final double contrast;
+  final String status;
+  final String errorMessage;
+  final bool isSaved;
 
   const ActivityItem({
     required this.id,
@@ -64,6 +73,15 @@ class ActivityItem {
     required this.thumbnailUrl,
     this.originalImageUrl = '',
     this.stencilImageUrl = '',
+    this.baseStencilImageUrl = '',
+    this.styleName = '',
+    this.colorTheme = '',
+    this.detailLevel = 1,
+    this.brightness = 0.8,
+    this.contrast = 0.6,
+    this.status = '',
+    this.errorMessage = '',
+    this.isSaved = false,
   });
 }
 

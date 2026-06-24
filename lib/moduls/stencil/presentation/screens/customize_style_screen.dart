@@ -50,6 +50,12 @@ class CustomizeStyleScreen extends StatelessWidget {
                 final originalImage =
                     controller.activeStencil.value?.originalImageUrl ??
                     controller.samples.first.originalUrl;
+                final b = controller.brightness.value;
+                final c = controller.contrast.value;
+
+                final brightnessOffset = (b - 0.5) * 200;
+                final contrastScale = c * 2;
+                final contrastOffset = (-0.5 * contrastScale + 0.5) * 255;
 
                 return Container(
                   decoration: BoxDecoration(
@@ -59,17 +65,25 @@ class CustomizeStyleScreen extends StatelessWidget {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(
-                        minHeight: 200,
-                        maxHeight: 400,
-                      ),
-                      child: AppCachedImage(
-                        imageFile: localFile,
-                        imageUrl: localFile == null ? originalImage : null,
-                        width: double.infinity,
-                        fit: BoxFit.contain,
-                        onTap: () {},
+                    child: ColorFiltered(
+                      colorFilter: ColorFilter.matrix(<double>[
+                        contrastScale, 0, 0, 0, brightnessOffset + contrastOffset,
+                        0, contrastScale, 0, 0, brightnessOffset + contrastOffset,
+                        0, 0, contrastScale, 0, brightnessOffset + contrastOffset,
+                        0, 0, 0, 1, 0,
+                      ]),
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          minHeight: 200,
+                          maxHeight: 400,
+                        ),
+                        child: AppCachedImage(
+                          imageFile: localFile,
+                          imageUrl: localFile == null ? originalImage : null,
+                          width: double.infinity,
+                          fit: BoxFit.contain,
+                          onTap: () {},
+                        ),
                       ),
                     ),
                   ),
@@ -179,23 +193,7 @@ class CustomizeStyleScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 46,
                 child: ElevatedButton(
-                  onPressed: () async {
-                    showDialog<void>(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) => const GeneratingDialog(),
-                    );
-
-                    final success = await controller.generateStencil();
-
-                    if (Get.isDialogOpen ?? false) {
-                      Get.back();
-                    }
-
-                    if (success) {
-                      Get.toNamed(StencilRoutes.stencilResult);
-                    }
-                  },
+                  onPressed: () => _onGenerate(context, controller),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppPalette.purple,
                     foregroundColor: Colors.white,
@@ -222,6 +220,24 @@ class CustomizeStyleScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _onGenerate(BuildContext context, StencilController controller) async {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const GeneratingDialog(),
+    );
+
+    final success = await controller.generateStencil();
+
+    if (context.mounted && Navigator.of(context, rootNavigator: true).canPop()) {
+      Navigator.of(context, rootNavigator: true).pop();
+    }
+
+    if (success) {
+      Get.toNamed(StencilRoutes.stencilResult);
+    }
   }
 }
 

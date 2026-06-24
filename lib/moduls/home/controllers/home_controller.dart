@@ -397,6 +397,15 @@ class HomeController extends GetxController {
           : record.originalImageUrl,
       originalImageUrl: record.originalImageUrl,
       stencilImageUrl: stencilThumb,
+      baseStencilImageUrl: record.baseStencilImageUrl,
+      styleName: record.style,
+      colorTheme: record.colorTheme,
+      detailLevel: record.detailLevel,
+      brightness: record.brightness,
+      contrast: record.contrast,
+      status: record.status,
+      errorMessage: record.errorMessage,
+      isSaved: record.isSaved,
     );
   }
 

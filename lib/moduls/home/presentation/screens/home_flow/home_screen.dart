@@ -11,6 +11,7 @@ import 'package:cembostyle/moduls/home/controllers/home_controller.dart';
 import 'package:cembostyle/moduls/home/presentation/routes/home_routes.dart';
 import 'package:cembostyle/moduls/home/presentation/widgets/home_flow/home_hero_card.dart';
 import 'package:cembostyle/moduls/stencil/controllers/stencil_controller.dart';
+import 'package:cembostyle/moduls/stencil/models/stencil_models.dart';
 import 'package:cembostyle/moduls/stencil/presentation/routes/stencil_routes.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -229,15 +230,40 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ...List.generate(limitedItems.length, (index) {
                       final item = limitedItems[index];
-                      return RecentActivityTile(
-                        title: item.title,
-                        style: item.style,
-                        date: item.date,
-                        thumbnailUrl: item.stencilImageUrl.isNotEmpty
-                            ? item.stencilImageUrl
-                            : item.thumbnailUrl,
-                        originalImageUrl: item.originalImageUrl,
-                        highlightStyle: index == 0,
+                      return GestureDetector(
+                        onTap: () {
+                          final stencilCtrl = Get.find<StencilController>();
+                          stencilCtrl.applyStencilRecord(
+                            StencilRecord(
+                              id: item.id,
+                              style: item.styleName,
+                              colorTheme: item.colorTheme,
+                              detailLevel: item.detailLevel,
+                              brightness: item.brightness,
+                              contrast: item.contrast,
+                              status: item.status,
+                              createdAt: item.date,
+                              updatedAt: item.date,
+                              originalImageUrl: item.originalImageUrl,
+                              stencilImageUrl: item.stencilImageUrl,
+                              baseStencilImageUrl: item.baseStencilImageUrl,
+                              errorCode: '',
+                              errorMessage: item.errorMessage,
+                              isSaved: item.isSaved,
+                            ),
+                          );
+                          Get.toNamed(StencilRoutes.stencilResult);
+                        },
+                        child: RecentActivityTile(
+                          title: item.title,
+                          style: item.style,
+                          date: item.date,
+                          thumbnailUrl: item.stencilImageUrl.isNotEmpty
+                              ? item.stencilImageUrl
+                              : item.thumbnailUrl,
+                          originalImageUrl: item.originalImageUrl,
+                          highlightStyle: index == 0,
+                        ),
                       );
                     }),
                   ],
