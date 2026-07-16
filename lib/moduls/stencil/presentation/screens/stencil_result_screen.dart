@@ -1,3 +1,6 @@
+import 'dart:ui' as ui;
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -330,6 +333,25 @@ class _DownloadOption extends StatelessWidget {
   }
 }
 
+/// Recolors a white-background/dark-ink stencil image to [tint] while
+/// leaving white untouched, based on per-pixel luminance. Works regardless
+/// of the ink's original hue (the backend may bake in red or black).
+List<double> _stencilLineColorMatrix(Color tint) {
+  const lr = 0.299, lg = 0.587, lb = 0.114;
+  final tr = tint.r * 255;
+  final tg = tint.g * 255;
+  final tb = tint.b * 255;
+  final kr = (255 - tr) / 255;
+  final kg = (255 - tg) / 255;
+  final kb = (255 - tb) / 255;
+  return <double>[
+    kr * lr, kr * lg, kr * lb, 0, tr,
+    kg * lr, kg * lg, kg * lb, 0, tg,
+    kb * lr, kb * lg, kb * lb, 0, tb,
+    0, 0, 0, 1, 0,
+  ];
+}
+
 class _OverlayResultView extends StatelessWidget {
   final String stencilImageUrl;
   final String originalImageUrl;
@@ -423,13 +445,25 @@ class _OverlayResultView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                       child: AspectRatio(
                         aspectRatio: 0.75,
-                        child: AppCachedImage(
-                          imageUrl: stencilImageUrl,
-                          width: double.infinity,
-                          height: double.infinity,
-                          fit: BoxFit.contain,
-                          onTap: () {},
-                        ),
+                        child: Obx(() {
+                          final tint = _overlayColors[
+                              selectedColorIndex.value.clamp(
+                                0,
+                                _overlayColors.length - 1,
+                              )];
+                          return ColorFiltered(
+                            colorFilter: ColorFilter.matrix(
+                              _stencilLineColorMatrix(tint),
+                            ),
+                            child: AppCachedImage(
+                              imageUrl: stencilImageUrl,
+                              width: double.infinity,
+                              height: double.infinity,
+                              fit: BoxFit.contain,
+                              onTap: () {},
+                            ),
+                          );
+                        }),
                       ),
                     ),
                   ),
@@ -464,49 +498,10 @@ class _OverlayResultView extends StatelessWidget {
                                 0,
                                 _overlayColors.length - 1,
                               )];
-                          return Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              AppCachedImage(
-                                imageUrl: originalImageUrl,
-                                width: double.infinity,
-                                height: double.infinity,
-                                fit: BoxFit.cover,
-                                onTap: () {},
-                              ),
-                              ColorFiltered(
-                                colorFilter: ColorFilter.mode(
-                                  tint.withValues(alpha: 0.0),
-                                  BlendMode.color,
-                                ),
-                                child: Opacity(
-                                  opacity: 0.72,
-                                  child: AppCachedImage(
-                                    imageUrl: stencilImageUrl,
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    fit: BoxFit.cover,
-                                    onTap: () {},
-                                  ),
-                                ),
-                              ),
-                              ColorFiltered(
-                                colorFilter: ColorFilter.mode(
-                                  tint.withValues(alpha: 0.45),
-                                  BlendMode.srcIn,
-                                ),
-                                child: Opacity(
-                                  opacity: 0.55,
-                                  child: AppCachedImage(
-                                    imageUrl: stencilImageUrl,
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    fit: BoxFit.cover,
-                                    onTap: () {},
-                                  ),
-                                ),
-                              ),
-                            ],
+                          return _StencilOverlayView(
+                            photoUrl: originalImageUrl,
+                            stencilUrl: stencilImageUrl,
+                            tint: tint,
                           );
                         }),
                       ),
@@ -519,6 +514,152 @@ class _OverlayResultView extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+/// Composites [stencilUrl] over [photoUrl] using a multiply blend, so the
+/// stencil's white background drops out entirely (no dimming/wash-out) and
+/// only the ink strokes darken the photo, tinted to [tint].
+class _StencilOverlayView extends StatefulWidget {
+  final String photoUrl;
+  final String stencilUrl;
+  final Color tint;
+
+  const _StencilOverlayView({
+    required this.photoUrl,
+    required this.stencilUrl,
+    required this.tint,
+  });
+
+  @override
+  State<_StencilOverlayView> createState() => _StencilOverlayViewState();
+}
+
+class _StencilOverlayViewState extends State<_StencilOverlayView> {
+  ui.Image? _photo;
+  ui.Image? _stencil;
+  ImageStream? _photoStream;
+  ImageStream? _stencilStream;
+  late final ImageStreamListener _photoListener;
+  late final ImageStreamListener _stencilListener;
+
+  @override
+  void initState() {
+    super.initState();
+    _photoListener = ImageStreamListener((info, _) {
+      if (mounted) setState(() => _photo = info.image);
+    });
+    _stencilListener = ImageStreamListener((info, _) {
+      if (mounted) setState(() => _stencil = info.image);
+    });
+    _resolve();
+  }
+
+  @override
+  void didUpdateWidget(covariant _StencilOverlayView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.photoUrl != widget.photoUrl ||
+        oldWidget.stencilUrl != widget.stencilUrl) {
+      _photo = null;
+      _stencil = null;
+      _resolve();
+    }
+  }
+
+  void _resolve() {
+    _photoStream?.removeListener(_photoListener);
+    _stencilStream?.removeListener(_stencilListener);
+
+    if (widget.photoUrl.isNotEmpty) {
+      _photoStream = CachedNetworkImageProvider(widget.photoUrl)
+          .resolve(const ImageConfiguration());
+      _photoStream!.addListener(_photoListener);
+    }
+    if (widget.stencilUrl.isNotEmpty) {
+      _stencilStream = CachedNetworkImageProvider(widget.stencilUrl)
+          .resolve(const ImageConfiguration());
+      _stencilStream!.addListener(_stencilListener);
+    }
+  }
+
+  @override
+  void dispose() {
+    _photoStream?.removeListener(_photoListener);
+    _stencilStream?.removeListener(_stencilListener);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ready = _photo != null && _stencil != null;
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        CustomPaint(
+          painter: _StencilOverlayPainter(
+            photo: _photo,
+            stencil: _stencil,
+            tint: widget.tint,
+          ),
+        ),
+        if (!ready)
+          Container(
+            color: Colors.grey.shade200,
+            child: const Center(
+              child: SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _StencilOverlayPainter extends CustomPainter {
+  final ui.Image? photo;
+  final ui.Image? stencil;
+  final Color tint;
+
+  _StencilOverlayPainter({
+    required this.photo,
+    required this.stencil,
+    required this.tint,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final photo = this.photo;
+    if (photo != null) {
+      _drawCover(canvas, size, photo, Paint());
+    }
+
+    final stencil = this.stencil;
+    if (stencil != null) {
+      final recolorPaint = Paint()
+        ..blendMode = BlendMode.multiply
+        ..colorFilter = ColorFilter.matrix(_stencilLineColorMatrix(tint));
+      _drawCover(canvas, size, stencil, recolorPaint);
+    }
+  }
+
+  void _drawCover(Canvas canvas, Size size, ui.Image image, Paint paint) {
+    final imageSize = Size(image.width.toDouble(), image.height.toDouble());
+    final fitted = applyBoxFit(BoxFit.cover, imageSize, size);
+    final srcRect =
+        Alignment.center.inscribe(fitted.source, Offset.zero & imageSize);
+    final dstRect =
+        Alignment.center.inscribe(fitted.destination, Offset.zero & size);
+    canvas.drawImageRect(image, srcRect, dstRect, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _StencilOverlayPainter oldDelegate) {
+    return oldDelegate.photo != photo ||
+        oldDelegate.stencil != stencil ||
+        oldDelegate.tint != tint;
   }
 }
 
